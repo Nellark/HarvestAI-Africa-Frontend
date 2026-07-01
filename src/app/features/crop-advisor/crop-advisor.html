@@ -1,0 +1,146 @@
+<div class="page-enter">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">AI Crop Advisor</h1>
+          <p class="page-subtitle">Get personalised crop recommendations based on your farm conditions</p>
+        </div>
+      </div>
+
+      <div class="advisor-layout">
+        <!-- Input Panel -->
+        <div class="inputs-panel card">
+          <h3 style="margin-bottom:20px;font-size:16px">Farm Conditions</h3>
+          <div class="form-grid">
+            <div class="field-group">
+              <label>Province / Region</label>
+              <select class="input-field" [(ngModel)]="inputs.province">
+                @for (p of provinces; track p) { <option [value]="p">{{ p }}</option> }
+              </select>
+            </div>
+            <div class="field-group">
+              <label>Country</label>
+              <select class="input-field" [(ngModel)]="inputs.country">
+                @for (c of countries; track c) { <option [value]="c">{{ c }}</option> }
+              </select>
+            </div>
+            <div class="field-group">
+              <label>Farm Size (ha)</label>
+              <input class="input-field" type="number" [(ngModel)]="inputs.farmSize" placeholder="e.g. 5" />
+            </div>
+            <div class="field-group">
+              <label>Planting Season</label>
+              <select class="input-field" [(ngModel)]="inputs.season">
+                @for (s of seasons; track s) { <option [value]="s">{{ s }}</option> }
+              </select>
+            </div>
+            <div class="field-group">
+              <label>Soil Type</label>
+              <select class="input-field" [(ngModel)]="inputs.soilType">
+                @for (s of soilTypes; track s) { <option [value]="s">{{ s }}</option> }
+              </select>
+            </div>
+            <div class="field-group">
+              <label>Water Availability</label>
+              <select class="input-field" [(ngModel)]="inputs.waterAvail">
+                @for (w of waterOptions; track w) { <option [value]="w">{{ w }}</option> }
+              </select>
+            </div>
+            <div class="field-group">
+              <label>Budget (ZAR/ha)</label>
+              <input class="input-field" type="number" [(ngModel)]="inputs.budget" placeholder="e.g. 5000" />
+            </div>
+            <div class="field-group">
+              <label>Experience Level</label>
+              <select class="input-field" [(ngModel)]="inputs.experience">
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="experienced">Experienced</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn btn-primary w-full btn-lg" style="margin-top:20px;justify-content:center" (click)="getRecommendations()" [disabled]="loading()">
+            @if (loading()) { <span class="spinner"></span> Analysing farm data... }
+            @else { <mat-icon>psychology</mat-icon> Get AI Recommendations }
+          </button>
+        </div>
+
+        <!-- Results Panel -->
+        <div class="results-panel">
+          @if (recommendations().length > 0) {
+            <div class="ai-explanation card page-enter" style="margin-bottom:16px">
+              <div style="display:flex;align-items:flex-start;gap:12px">
+                <div class="icon-wrap icon-wrap-primary" style="width:40px;height:40px;font-size:20px;border-radius:10px;flex-shrink:0"><mat-icon>psychology</mat-icon></div>
+                <div>
+                  <h4 style="font-size:14px;margin-bottom:4px">AI Analysis</h4>
+                  <p style="font-size:13.5px;color:var(--text-secondary);line-height:1.6">Based on your conditions in {{ inputs.province }} with {{ inputs.soilType }} soil and {{ inputs.waterAvail.toLowerCase() }} water availability, here are the top crops for maximum profitability this {{ inputs.season.toLowerCase() }} season.</p>
+                </div>
+              </div>
+            </div>
+
+            @for (rec of recommendations(); track rec.crop) {
+              <div class="rec-card card page-enter">
+                <div class="rec-card-header">
+                  <div class="rec-icon icon-wrap icon-wrap-primary" style="width:48px;height:48px;font-size:24px;border-radius:12px">
+                    <mat-icon>{{ rec.icon }}</mat-icon>
+                  </div>
+                  <div class="rec-info">
+                    <h3>{{ rec.crop }}</h3>
+                    <div class="rec-badges">
+                      <span class="badge badge-success">{{ rec.profitability }} profit</span>
+                      <span class="badge {{ difficultyBadge(rec.difficulty) }}">{{ rec.difficulty }}</span>
+                    </div>
+                  </div>
+                  <div class="rec-score">
+                    <div class="score-circle" [style.background]="scoreGradient(rec.aiScore)">
+                      <span>{{ rec.aiScore }}</span>
+                    </div>
+                    <span style="font-size:10px;color:var(--text-muted);text-align:center">AI Score</span>
+                  </div>
+                </div>
+
+                <div class="rec-metrics">
+                  <div class="metric">
+                    <mat-icon>trending_up</mat-icon>
+                    <div>
+                      <span class="metric-value">{{ rec.expectedYield }}</span>
+                      <span class="metric-label">Expected Yield</span>
+                    </div>
+                  </div>
+                  <div class="metric">
+                    <mat-icon>payments</mat-icon>
+                    <div>
+                      <span class="metric-value">{{ rec.revenueEstimate }}</span>
+                      <span class="metric-label">Revenue Estimate</span>
+                    </div>
+                  </div>
+                  <div class="metric">
+                    <mat-icon>water_drop</mat-icon>
+                    <div>
+                      <span class="metric-value">{{ rec.waterReq }}</span>
+                      <span class="metric-label">Water Requirement</span>
+                    </div>
+                  </div>
+                  <div class="metric">
+                    <mat-icon>event</mat-icon>
+                    <div>
+                      <span class="metric-value">{{ rec.duration }}</span>
+                      <span class="metric-label">Growing Season</span>
+                    </div>
+                  </div>
+                </div>
+
+                <p style="font-size:13px;color:var(--text-secondary);line-height:1.6;margin-bottom:12px">{{ rec.aiReason }}</p>
+
+                <button class="btn btn-outline btn-sm"><mat-icon>info</mat-icon> Full Planting Guide</button>
+              </div>
+            }
+          } @else {
+            <div class="empty-advisor card">
+              <div class="empty-icon"><mat-icon>tips_and_updates</mat-icon></div>
+              <h3>Ready for AI recommendations</h3>
+              <p>Fill in your farm conditions on the left and click "Get AI Recommendations" to see the best crops for your farm.</p>
+            </div>
+          }
+        </div>
+      </div>
+    </div>

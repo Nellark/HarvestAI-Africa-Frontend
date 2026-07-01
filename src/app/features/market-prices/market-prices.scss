@@ -1,0 +1,41 @@
+.page-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 12px; }
+    .header-actions { display: flex; gap: 10px; align-items: center; }
+    .search-wrap { display: flex; align-items: center; gap: 8px; background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; flex: 1; min-width: 200px; }
+    .search-wrap mat-icon { color: var(--text-muted); font-size: 18px; }
+    .search-input { border: none; background: transparent; font-size: 13.5px; outline: none; color: var(--text-primary); width: 100%; font-family: 'Inter',sans-serif; }
+    .filter-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+    .market-layout { display: grid; grid-template-columns: 1fr 320px; gap: 24px; }
+    .prices-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    .price-card { cursor: pointer; padding: 18px; transition: all var(--transition); }
+    .price-card.selected { border-color: var(--primary); background: rgba(46,125,50,0.03); }
+    .price-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .crop-icon-sm { width: 36px; height: 36px; font-size: 18px; border-radius: 8px; flex-shrink: 0; }
+    .price-info { flex: 1; }
+    .price-name { font-size: 14px; font-weight: 700; display: block; }
+    .price-market { font-size: 11px; color: var(--text-muted); }
+    .trend-indicator mat-icon { font-size: 22px; }
+    .trend-indicator.up mat-icon { color: var(--success); }
+    .trend-indicator.down mat-icon { color: var(--danger); }
+    .price-main { display: flex; align-items: baseline; gap: 3px; margin-bottom: 4px; }
+    .price-val { font-family: 'Poppins',sans-serif; font-size: 22px; font-weight: 700; }
+    .price-unit { font-size: 12px; color: var(--text-muted); }
+    .price-change { display: flex; align-items: center; gap: 3px; font-size: 12.5px; font-weight: 600; }
+    .price-change mat-icon { font-size: 14px; }
+    .price-change.up { color: var(--success); }
+    .price-change.down { color: var(--danger); }
+    .detail-card h3 { font-size: 16px; margin-bottom: 8px; }
+    .dp-val { font-family: 'Poppins',sans-serif; font-size: 34px; font-weight: 800; }
+    .dp-unit { font-size: 13px; color: var(--text-muted); }
+    .price-trend-chart { margin-bottom: 16px; }
+    .sparkline { display: flex; align-items: flex-end; gap: 3px; height: 50px; }
+    .spark-bar { flex: 1; background: rgba(46,125,50,0.3); border-radius: 2px 2px 0 0; transition: background var(--transition); min-height: 2px; }
+    .spark-bar.highlight { background: var(--primary); }
+    .ai-market-tip { display: flex; gap: 10px; padding: 12px; background: rgba(46,125,50,0.04); border-radius: 10px; border: 1px solid rgba(46,125,50,0.1); }
+    .buyer-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border-light); }
+    .buyer-item:last-child { border-bottom: none; }
+    .buyer-name { font-size: 13px; font-weight: 600; display: block; }
+    .buyer-loc { display: flex; align-items: center; gap: 3px; font-size: 11px; color: var(--text-muted); }
+    .buyer-loc mat-icon { font-size: 11px; }
+    .buyer-price { font-size: 14px; font-weight: 700; color: var(--primary); }
+    @media (max-width: 1024px) { .market-layout { grid-template-columns: 1fr; } }
+    @media (max-width: 768px) { .prices-grid { grid-template-columns: 1fr; } }

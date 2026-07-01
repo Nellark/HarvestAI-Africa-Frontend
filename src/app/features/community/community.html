@@ -1,0 +1,109 @@
+<div class="page-enter">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Community</h1>
+          <p class="page-subtitle">Connect with farmers, experts, and agronomists across Africa</p>
+        </div>
+        <button class="btn btn-primary"><mat-icon>edit</mat-icon> New Post</button>
+      </div>
+
+      <div class="community-layout">
+        <!-- Main Feed -->
+        <div class="feed-section">
+          <!-- Category Filters -->
+          <div class="category-filters" style="margin-bottom:20px">
+            @for (cat of categories; track cat.id) {
+              <button class="chip" [class.active]="activeCategory() === cat.id" (click)="activeCategory.set(cat.id)">
+                <mat-icon>{{ cat.icon }}</mat-icon> {{ cat.label }}
+              </button>
+            }
+          </div>
+
+          <!-- Posts -->
+          @for (post of filteredPosts(); track post.id) {
+            <div class="post-card card">
+              <div class="post-header">
+                <div class="post-author">
+                  <div class="author-avatar">
+                    @if (post.author.avatar) {
+                      <img [src]="post.author.avatar" [alt]="post.author.name" />
+                    } @else {
+                      {{ post.author.name.charAt(0) }}
+                    }
+                  </div>
+                  <div>
+                    <span class="author-name">{{ post.author.name }}</span>
+                    <div class="author-meta">
+                      <span class="author-role">{{ post.author.role }}</span>
+                      <span class="author-loc"><mat-icon>location_on</mat-icon>{{ post.author.location }}</span>
+                      <span class="post-time">{{ timeAgo(post.createdAt) }}</span>
+                    </div>
+                  </div>
+                </div>
+                <span class="badge {{ categoryBadge(post.category) }}">{{ post.category }}</span>
+              </div>
+
+              @if (post.image) {
+                <img [src]="post.image" [alt]="post.title" class="post-image" />
+              }
+
+              <h3 class="post-title">{{ post.title }}</h3>
+              <p class="post-content">{{ post.content | slice:0:200 }}{{ post.content.length > 200 ? '...' : '' }}</p>
+
+              <div class="post-tags">
+                @for (tag of post.tags; track tag) {
+                  <span class="chip" style="font-size:11px">{{ tag }}</span>
+                }
+              </div>
+
+              <div class="post-footer">
+                <button class="post-action"><mat-icon>thumb_up</mat-icon> {{ post.likes }}</button>
+                <button class="post-action"><mat-icon>chat_bubble_outline</mat-icon> {{ post.comments }}</button>
+                <button class="post-action"><mat-icon>visibility</mat-icon> {{ post.views }}</button>
+                <button class="post-action" style="margin-left:auto"><mat-icon>share</mat-icon></button>
+                <button class="post-action"><mat-icon>bookmark_border</mat-icon></button>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Sidebar -->
+        <div class="community-sidebar">
+          <!-- Search -->
+          <div class="card" style="padding:12px;margin-bottom:16px">
+            <div class="search-wrap">
+              <mat-icon>search</mat-icon>
+              <input class="search-input" [(ngModel)]="searchTerm" placeholder="Search community..." />
+            </div>
+          </div>
+
+          <!-- Top Experts -->
+          <div class="card" style="margin-bottom:16px">
+            <h4 style="font-size:14px;font-weight:700;margin-bottom:14px">Featured Experts</h4>
+            @for (expert of experts; track expert.name) {
+              <div class="expert-item">
+                <div class="expert-avatar">{{ expert.name.charAt(0) }}</div>
+                <div class="expert-info">
+                  <span class="expert-name">{{ expert.name }}</span>
+                  <span class="expert-spec">{{ expert.specialty }}</span>
+                </div>
+                <button class="btn btn-sm btn-outline">Follow</button>
+              </div>
+            }
+          </div>
+
+          <!-- Trending Tags -->
+          <div class="card">
+            <h4 style="font-size:14px;font-weight:700;margin-bottom:14px">Trending Topics</h4>
+            <div class="trending-tags">
+              @for (tag of trendingTags; track tag.tag) {
+                <div class="trending-tag">
+                  <span class="tag-name">{{ tag.tag }}</span>
+                  <span class="tag-count">{{ tag.count }} posts</span>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

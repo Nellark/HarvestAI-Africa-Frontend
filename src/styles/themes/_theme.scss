@@ -1,0 +1,49 @@
+// =============================================
+// HarvestAI Africa — Theme (CSS Custom Properties)
+// =============================================
+
+:root {
+  --primary: #2E7D32;
+  --primary-dark: #1B4332;
+  --primary-light: #4CAF50;
+  --accent: #C8E36A;
+  --accent-dark: #A8C43A;
+  --bg: #F8F9F5;
+  --bg-card: #FFFFFF;
+  --bg-subtle: #F1F5F1;
+  --border: #E5E7EB;
+  --border-light: #F3F4F6;
+  --text-primary: #1F2937;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+  --success: #4CAF50;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+  --info: #3B82F6;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow: 0 4px 16px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
+  --shadow-lg: 0 10px 40px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.06);
+  --shadow-hover: 0 8px 32px rgba(46,125,50,0.15), 0 4px 16px rgba(0,0,0,0.06);
+  --radius-sm: 8px;
+  --radius: 16px;
+  --radius-md: 20px;
+  --radius-lg: 24px;
+  --sidebar-width: 260px;
+  --topbar-height: 64px;
+  --transition: 0.2s cubic-bezier(0.4,0,0.2,1);
+  --transition-slow: 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+
+.dark-theme {
+  --bg: #0F1A12;
+  --bg-card: #1A2B1E;
+  --bg-subtle: #162419;
+  --border: #2D3F32;
+  --border-light: #243329;
+  --text-primary: #F0F4F0;
+  --text-secondary: #9AB09D;
+  --text-muted: #6B8570;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow: 0 4px 16px rgba(0,0,0,0.3);
+  --shadow-lg: 0 10px 40px rgba(0,0,0,0.4);
+}

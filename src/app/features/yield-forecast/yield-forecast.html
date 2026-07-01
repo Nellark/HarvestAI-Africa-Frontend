@@ -1,0 +1,102 @@
+<div class="page-enter">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Yield Forecast</h1>
+          <p class="page-subtitle">AI-powered yield predictions for {{ forecast.cropName }} — {{ state.farm()?.name }}</p>
+        </div>
+      </div>
+
+      <!-- Forecast Summary Cards -->
+      <div class="forecast-summary">
+        <div class="summary-card card primary-card">
+          <div class="summary-icon"><mat-icon>trending_up</mat-icon></div>
+          <div class="summary-val">{{ forecast.predictedYield }} <span>t/ha</span></div>
+          <div class="summary-label">Predicted Yield</div>
+          <div class="summary-change trend-up">
+            <mat-icon>arrow_upward</mat-icon>
+            +{{ pctChange() }}% vs last year
+          </div>
+        </div>
+        <div class="summary-card card">
+          <div class="summary-icon neutral"><mat-icon>history</mat-icon></div>
+          <div class="summary-val">{{ forecast.historicalYield }} <span>t/ha</span></div>
+          <div class="summary-label">Historical Average</div>
+          <div class="summary-change" style="color:var(--text-muted)">Previous season</div>
+        </div>
+        <div class="summary-card card">
+          <div class="summary-icon warning"><mat-icon>verified</mat-icon></div>
+          <div class="summary-val">{{ forecast.confidence }}<span>%</span></div>
+          <div class="summary-label">AI Confidence</div>
+          <div class="progress-bar-track" style="margin-top:8px">
+            <div class="progress-bar-fill" [style.width]="forecast.confidence + '%'"></div>
+          </div>
+        </div>
+        <div class="summary-card card">
+          <div class="summary-icon success"><mat-icon>payments</mat-icon></div>
+          <div class="summary-val">R<span style="font-size:16px"> 23,870</span></div>
+          <div class="summary-label">Revenue Forecast</div>
+          <div class="summary-change trend-up"><mat-icon>arrow_upward</mat-icon>Based on current prices</div>
+        </div>
+      </div>
+
+      <div class="forecast-grid">
+        <!-- Yield Chart (Visual) -->
+        <div class="card">
+          <h3 style="margin-bottom:20px">Monthly Yield Accumulation (t/ha)</h3>
+          <div class="yield-chart">
+            @for (d of forecast.monthlyData; track d.month) {
+              <div class="chart-bar-group">
+                <div class="chart-bars">
+                  <div class="chart-bar predicted" [style.height]="(d.predicted / forecast.predictedYield * 160) + 'px'" [matTooltip]="'Predicted: ' + d.predicted + ' t/ha'"></div>
+                  <div class="chart-bar historical" [style.height]="(d.historical / forecast.predictedYield * 160) + 'px'" [matTooltip]="'Historical: ' + d.historical + ' t/ha'"></div>
+                </div>
+                <span class="chart-label">{{ d.month }}</span>
+              </div>
+            }
+          </div>
+          <div class="chart-legend">
+            <div class="legend-item"><span class="legend-dot predicted-dot"></span>Predicted {{ forecast.predictedYield }}t/ha</div>
+            <div class="legend-item"><span class="legend-dot historical-dot"></span>Historical {{ forecast.historicalYield }}t/ha</div>
+          </div>
+        </div>
+
+        <!-- Risk Factors -->
+        <div class="card">
+          <h3 style="margin-bottom:16px">Yield Impact Factors</h3>
+          @for (factor of forecast.factors; track factor.name) {
+            <div class="factor-item">
+              <div class="factor-header">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span class="factor-impact-icon" [class.positive]="factor.impact === 'positive'" [class.negative]="factor.impact === 'negative'">
+                    <mat-icon>{{ factor.impact === 'positive' ? 'arrow_upward' : factor.impact === 'negative' ? 'arrow_downward' : 'remove' }}</mat-icon>
+                  </span>
+                  <span class="factor-name">{{ factor.name }}</span>
+                </div>
+                <span class="factor-score" [style.color]="scoreColor(factor.impact, factor.score)">{{ factor.score }}%</span>
+              </div>
+              <div class="progress-bar-track" style="margin:6px 0">
+                <div class="progress-bar-fill" [style.width]="factor.score + '%'" [style.background]="scoreColor(factor.impact, factor.score)"></div>
+              </div>
+              <p style="font-size:11.5px;color:var(--text-muted)">{{ factor.description }}</p>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- AI Recommendations -->
+      <div class="card" style="margin-top:0">
+        <h3 style="margin-bottom:16px"><mat-icon style="font-size:20px;vertical-align:middle;color:var(--primary)">psychology</mat-icon> AI Yield Improvement Recommendations</h3>
+        <div class="grid-3">
+          @for (rec of yieldRecs; track rec.title) {
+            <div class="yield-rec-card">
+              <div class="icon-wrap {{ rec.iconClass }}" style="width:40px;height:40px;font-size:20px;border-radius:10px;margin-bottom:10px">
+                <mat-icon>{{ rec.icon }}</mat-icon>
+              </div>
+              <h4>{{ rec.title }}</h4>
+              <p>{{ rec.description }}</p>
+              <span class="badge {{ rec.badgeClass }}">+{{ rec.improvement }}% yield</span>
+            </div>
+          }
+        </div>
+      </div>
+    </div>

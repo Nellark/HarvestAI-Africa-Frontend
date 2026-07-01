@@ -1,0 +1,246 @@
+<div class="page-enter">
+      <!-- Page Header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Good {{ greeting() }}, {{ firstName() }} 👋</h1>
+          <p class="page-subtitle">Here's what's happening on your farm today · {{ today() }}</p>
+        </div>
+        <div class="header-actions">
+          <a routerLink="/app/ai-assistant" class="btn btn-primary">
+            <mat-icon>psychology</mat-icon> Ask AI
+          </a>
+          <a routerLink="/app/planner" class="btn btn-outline">
+            <mat-icon>add</mat-icon> Add Task
+          </a>
+        </div>
+      </div>
+
+      <!-- Stat Cards Row -->
+      <div class="stats-row">
+        @for (stat of statCards; track stat.label) {
+          <div class="stat-card card">
+            <div class="stat-card-header">
+              <div class="icon-wrap {{ stat.iconClass }}">
+                <mat-icon>{{ stat.icon }}</mat-icon>
+              </div>
+              <span class="trend-badge" [class.trend-up]="stat.trend > 0" [class.trend-down]="stat.trend < 0">
+                <mat-icon>{{ stat.trend > 0 ? 'trending_up' : stat.trend < 0 ? 'trending_down' : 'trending_flat' }}</mat-icon>
+                {{ stat.trendLabel }}
+              </span>
+            </div>
+            <div class="stat-value">{{ stat.value }}</div>
+            <div class="stat-label">{{ stat.label }}</div>
+          </div>
+        }
+      </div>
+
+      <!-- Main Grid -->
+      <div class="dashboard-grid">
+        <!-- Left Column -->
+        <div class="dashboard-col-main">
+
+          <!-- Weather Card -->
+          <div class="weather-card card">
+            <div class="weather-main">
+              <div class="weather-info">
+                <div class="weather-temp">{{ state.weather()?.temperature }}°C</div>
+                <div class="weather-cond">{{ state.weather()?.condition }}</div>
+                <div class="weather-loc">
+                  <mat-icon>location_on</mat-icon>
+                  {{ state.weather()?.location }}
+                </div>
+                <div class="weather-meta">
+                  <span><mat-icon>water_drop</mat-icon>{{ state.weather()?.humidity }}% Humidity</span>
+                  <span><mat-icon>air</mat-icon>{{ state.weather()?.windSpeed }} km/h</span>
+                  <span><mat-icon>wb_sunny</mat-icon>UV {{ state.weather()?.uvIndex }}</span>
+                </div>
+              </div>
+              <div class="weather-icon-big">
+                <mat-icon>{{ state.weather()?.icon }}</mat-icon>
+              </div>
+            </div>
+            <div class="weather-forecast">
+              @for (day of state.weather()?.forecast?.slice(0, 7); track day.day) {
+                <div class="forecast-day">
+                  <span class="forecast-day-name">{{ day.day }}</span>
+                  <mat-icon class="forecast-icon">{{ day.icon }}</mat-icon>
+                  <span class="forecast-high">{{ day.high }}°</span>
+                  <span class="forecast-low">{{ day.low }}°</span>
+                  @if (day.rain > 0) {
+                    <span class="forecast-rain"><mat-icon>water_drop</mat-icon>{{ day.rain }}%</span>
+                  }
+                </div>
+              }
+            </div>
+            <div class="weather-ai-tip">
+              <mat-icon class="ai-tip-icon">psychology</mat-icon>
+              <span><strong>AI Tip:</strong> Heavy rain expected Thursday. Consider harvesting your tomatoes before Wednesday to avoid quality loss.</span>
+              <a routerLink="/app/weather" class="btn btn-sm btn-ghost" style="flex-shrink:0">View Details</a>
+            </div>
+          </div>
+
+          <!-- Crop Health -->
+          <div class="section-card card">
+            <div class="card-header">
+              <h3>Crop Health Overview</h3>
+              <a routerLink="/app/farm" class="btn btn-ghost btn-sm">View All</a>
+            </div>
+            <div class="crop-health-grid">
+              @for (crop of state.farm()?.crops; track crop.id) {
+                <div class="crop-health-card">
+                  <div class="crop-icon icon-wrap icon-wrap-primary">
+                    <mat-icon>{{ crop.icon }}</mat-icon>
+                  </div>
+                  <div class="crop-info">
+                    <span class="crop-name">{{ crop.name }}</span>
+                    <span class="crop-area">{{ crop.area }} {{ crop.areaUnit }}</span>
+                    <div class="crop-status-row">
+                      <span class="badge {{ statusBadge(crop.status) }}">{{ crop.status }}</span>
+                    </div>
+                  </div>
+                  <div class="crop-health-score">
+                    <div class="health-score" [style.color]="healthColor(crop.healthScore)">
+                      {{ crop.healthScore }}%
+                    </div>
+                    <div class="progress-bar-track" style="width:60px">
+                      <div class="progress-bar-fill" [style.width]="crop.healthScore + '%'" [style.background]="healthColor(crop.healthScore)"></div>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- AI Recommendations -->
+          <div class="section-card card">
+            <div class="card-header">
+              <h3>AI Recommendations</h3>
+              <span class="badge badge-primary">3 new</span>
+            </div>
+            <div class="ai-recs">
+              @for (rec of aiRecommendations; track rec.title) {
+                <div class="ai-rec-item">
+                  <div class="icon-wrap {{ rec.iconClass }}">
+                    <mat-icon>{{ rec.icon }}</mat-icon>
+                  </div>
+                  <div class="rec-content">
+                    <div class="rec-title">{{ rec.title }}</div>
+                    <div class="rec-desc">{{ rec.description }}</div>
+                  </div>
+                  <span class="badge {{ rec.badgeClass }}">{{ rec.priority }}</span>
+                </div>
+              }
+            </div>
+            <a routerLink="/app/ai-assistant" class="btn btn-outline w-full" style="justify-content:center;margin-top:16px">
+              <mat-icon>psychology</mat-icon> Chat with AI Assistant
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="dashboard-col-side">
+
+          <!-- Today's Tasks -->
+          <div class="section-card card">
+            <div class="card-header">
+              <h3>Today's Tasks</h3>
+              <a routerLink="/app/planner" class="btn btn-ghost btn-sm">See All</a>
+            </div>
+            <div class="tasks-list">
+              @for (task of state.tasks().slice(0, 4); track task.id) {
+                <div class="task-item" [class.done]="task.status === 'done'">
+                  <div class="task-check {{ task.status === 'done' ? 'checked' : '' }}">
+                    @if (task.status === 'done') { <mat-icon>check</mat-icon> }
+                  </div>
+                  <div class="task-info">
+                    <span class="task-title">{{ task.title }}</span>
+                    <span class="task-meta">
+                      <mat-icon>calendar_today</mat-icon>
+                      {{ task.dueDate }}
+                    </span>
+                  </div>
+                  <span class="badge {{ priorityBadge(task.priority) }}">{{ task.priority }}</span>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Market Snapshot -->
+          <div class="section-card card">
+            <div class="card-header">
+              <h3>Market Snapshot</h3>
+              <a routerLink="/app/market-prices" class="btn btn-ghost btn-sm">View All</a>
+            </div>
+            <div class="market-list">
+              @for (price of state.prices().slice(0, 5); track price.id) {
+                <div class="market-item">
+                  <span class="market-name">{{ price.name }}</span>
+                  <div class="market-right">
+                    <span class="market-price">R{{ price.price < 100 ? price.price.toFixed(2) : price.price.toLocaleString() }}/{{ price.unit }}</span>
+                    <span class="market-change" [class.trend-up]="price.trend === 'up'" [class.trend-down]="price.trend === 'down'">
+                      <mat-icon>{{ price.trend === 'up' ? 'arrow_upward' : price.trend === 'down' ? 'arrow_downward' : 'remove' }}</mat-icon>
+                      {{ price.changePercent > 0 ? '+' : '' }}{{ price.changePercent }}%
+                    </span>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Alerts -->
+          <div class="section-card card">
+            <div class="card-header">
+              <h3>Recent Alerts</h3>
+              <span class="badge badge-danger">{{ state.unreadNotifications() }} new</span>
+            </div>
+            <div class="alerts-list">
+              @for (n of state.notifications().slice(0, 3); track n.id) {
+                <div class="alert-item" [class.unread]="!n.read">
+                  <div class="alert-icon icon-wrap {{ alertIconClass(n.type) }}">
+                    <mat-icon>{{ n.icon }}</mat-icon>
+                  </div>
+                  <div class="alert-content">
+                    <div class="alert-title">{{ n.title }}</div>
+                    <div class="alert-msg">{{ n.message | slice:0:70 }}...</div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="section-card card">
+            <h3 style="margin-bottom:16px">Quick Actions</h3>
+            <div class="quick-actions">
+              @for (qa of quickActions; track qa.label) {
+                <a class="quick-action-btn" [routerLink]="qa.route">
+                  <mat-icon>{{ qa.icon }}</mat-icon>
+                  <span>{{ qa.label }}</span>
+                </a>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity Timeline -->
+      <div class="card section-card" style="margin-top:0">
+        <div class="card-header">
+          <h3>Activity Timeline</h3>
+        </div>
+        <div class="timeline">
+          @for (event of timeline; track event.title) {
+            <div class="timeline-item">
+              <div class="timeline-dot icon-wrap {{ event.iconClass }}">
+                <mat-icon>{{ event.icon }}</mat-icon>
+              </div>
+              <div class="timeline-content">
+                <div class="timeline-title">{{ event.title }}</div>
+                <div class="timeline-desc">{{ event.description }}</div>
+                <div class="timeline-time">{{ event.time }}</div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>

@@ -1,0 +1,54 @@
+<div class="page-enter">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Notifications</h1>
+          <p class="page-subtitle">{{ state.unreadNotifications() }} unread notifications</p>
+        </div>
+        <button class="btn btn-outline" (click)="state.markAllNotificationsRead()">
+          <mat-icon>done_all</mat-icon> Mark All Read
+        </button>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="notif-tabs" style="margin-bottom:20px">
+        @for (tab of tabs; track tab.id) {
+          <button class="chip" [class.active]="activeTab === tab.id" (click)="activeTab = tab.id">
+            <mat-icon>{{ tab.icon }}</mat-icon> {{ tab.label }}
+            @if (tab.id !== 'all' && countByType(tab.id) > 0) {
+              <span class="tab-badge">{{ countByType(tab.id) }}</span>
+            }
+          </button>
+        }
+      </div>
+
+      <div class="notif-list">
+        @for (n of filteredNotifications(); track n.id) {
+          <div class="notif-card card" [class.unread]="!n.read" (click)="state.markNotificationRead(n.id)">
+            <div class="notif-icon-wrap icon-wrap {{ iconClass(n.type) }}" style="width:46px;height:46px;font-size:22px;border-radius:12px;flex-shrink:0">
+              <mat-icon>{{ n.icon }}</mat-icon>
+            </div>
+            <div class="notif-body">
+              <div class="notif-header-row">
+                <h4 class="notif-title">{{ n.title }}</h4>
+                <div class="notif-meta">
+                  <span class="badge {{ priorityBadge(n.priority) }}" style="font-size:10px">{{ n.priority }}</span>
+                  <span class="notif-time">{{ timeAgo(n.timestamp) }}</span>
+                </div>
+              </div>
+              <p class="notif-msg">{{ n.message }}</p>
+            </div>
+            @if (!n.read) {
+              <div class="unread-dot"></div>
+            }
+          </div>
+        }
+
+        @if (filteredNotifications().length === 0) {
+          <div class="empty-state card" style="text-align:center;padding:64px">
+            <mat-icon style="font-size:48px;color:var(--text-muted);margin-bottom:12px">notifications_none</mat-icon>
+            <h3>No notifications</h3>
+            <p style="color:var(--text-secondary)">You're all caught up! Check back later for updates.</p>
+          </div>
+        }
+      </div>
+    </div>

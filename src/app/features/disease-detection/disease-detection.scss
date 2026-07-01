@@ -1,0 +1,44 @@
+.page-header { margin-bottom: 24px; }
+    .detection-layout { display: grid; grid-template-columns: 380px 1fr; gap: 24px; }
+    .upload-card { text-align: center; min-height: 340px; display: flex; align-items: center; justify-content: center; transition: border-color var(--transition); }
+    .upload-card.drag-over { border-color: var(--primary); background: rgba(46,125,50,0.04); }
+    .upload-placeholder { padding: 20px; }
+    .upload-icon { width: 72px; height: 72px; border-radius: 20px; background: rgba(46,125,50,0.1); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+    .upload-icon mat-icon { font-size: 36px; color: var(--primary); }
+    .upload-placeholder h3 { font-size: 18px; margin-bottom: 8px; }
+    .upload-placeholder p { font-size: 13.5px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 20px; }
+    .upload-actions { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+    .crop-pills { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+    .uploaded-preview img { width: 100%; border-radius: var(--radius); max-height: 220px; object-fit: cover; }
+    .tip-item { display: flex; align-items: flex-start; gap: 8px; font-size: 12.5px; color: var(--text-secondary); margin-bottom: 8px; }
+    .tip-item mat-icon { font-size: 15px; color: var(--success); flex-shrink: 0; margin-top: 1px; }
+    .result-card { }
+    .result-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; }
+    .result-header h3 { font-size: 16px; font-weight: 700; margin-bottom: 3px; }
+    .result-image { width: 100%; height: 200px; object-fit: cover; border-radius: var(--radius-sm); margin-bottom: 16px; }
+    .disease-name h2 { font-size: 20px; margin-bottom: 8px; }
+    .confidence-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 12.5px; }
+    .confidence-val { font-weight: 700; font-size: 15px; }
+    .result-sections { margin-top: 20px; display: flex; flex-direction: column; gap: 16px; }
+    .result-section h4 { display: flex; align-items: center; gap: 6px; font-size: 14px; margin-bottom: 10px; }
+    .result-section h4 mat-icon { font-size: 18px; color: var(--primary); }
+    .treatment-item { display: flex; align-items: flex-start; gap: 6px; font-size: 13px; color: var(--text-secondary); margin-bottom: 6px; line-height: 1.5; }
+    .treatment-item mat-icon { font-size: 15px; color: var(--primary); flex-shrink: 0; margin-top: 2px; }
+    .result-actions { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+    .empty-state { text-align: center; padding: 48px 24px; }
+    .empty-icon { width: 72px; height: 72px; border-radius: 20px; background: rgba(46,125,50,0.08); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; }
+    .empty-icon mat-icon { font-size: 36px; color: var(--primary); }
+    .empty-state h3 { font-size: 18px; margin-bottom: 8px; }
+    .empty-state p { font-size: 14px; color: var(--text-secondary); }
+    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .card-header h3 { font-size: 15px; font-weight: 700; }
+    .history-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .history-card { cursor: pointer; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border); transition: all var(--transition); }
+    .history-card:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+    .history-card img { width: 100%; height: 90px; object-fit: cover; }
+    .history-card-info { padding: 8px; }
+    .history-crop { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; }
+    .history-disease { font-size: 12.5px; font-weight: 600; display: block; margin-top: 2px; }
+    .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @media (max-width: 1024px) { .detection-layout { grid-template-columns: 1fr; } }

@@ -1,0 +1,150 @@
+<div class="ai-layout page-enter">
+  <!-- Left: History -->
+  <aside class="history-panel hide-mobile">
+    <div class="history-header">
+      <h3>Conversations</h3>
+      <button class="btn btn-primary btn-sm" (click)="newConversation()">
+        <mat-icon>add</mat-icon> New
+      </button>
+    </div>
+    <div class="history-list">
+      @for (conv of conversations; track conv.id) {
+        <div class="history-item" [class.active]="activeConv() === conv.id" (click)="activeConv.set(conv.id)">
+          <mat-icon>chat</mat-icon>
+          <div class="history-item-content">
+            <span class="history-title">{{ conv.title }}</span>
+            <span class="history-time">{{ conv.time }}</span>
+          </div>
+        </div>
+      }
+    </div>
+    <div class="history-footer">
+      <div class="ai-model-badge">
+        <mat-icon>auto_awesome</mat-icon>
+        <div>
+          <strong>HarvestAI v2.1</strong>
+          <span>Agriculture-specialized model</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Chat -->
+  <div class="chat-area">
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <div class="ai-avatar">
+          <mat-icon>psychology</mat-icon>
+        </div>
+        <div>
+          <h3>HarvestAI Assistant</h3>
+          <span class="online-status"><span class="dot"></span> Online — Ready to help</span>
+        </div>
+      </div>
+      <div class="chat-header-actions">
+        <button class="icon-btn" title="Voice Input"><mat-icon>mic</mat-icon></button>
+        <button class="icon-btn" title="Upload Image"><mat-icon>image</mat-icon></button>
+        <button class="icon-btn" title="Clear Chat"><mat-icon>delete_sweep</mat-icon></button>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="messages-area" #messagesArea>
+      <!-- Suggested Prompts (when empty) -->
+      @if (messages().length === 1) {
+        <div class="suggestions">
+          <div class="suggestions-title">
+            <mat-icon>auto_awesome</mat-icon>
+            Suggested questions
+          </div>
+          <div class="suggestions-grid">
+            @for (s of suggestions; track s) {
+              <button class="suggestion-btn" (click)="sendSuggestion(s)">{{ s }}</button>
+            }
+          </div>
+        </div>
+      }
+
+      @for (msg of messages(); track msg.id) {
+        <div class="message" [class.user]="msg.role === 'user'" [class.assistant]="msg.role === 'assistant'">
+          @if (msg.role === 'assistant') {
+            <div class="msg-avatar ai-avatar-sm">
+              <mat-icon>psychology</mat-icon>
+            </div>
+          }
+          <div class="msg-bubble">
+            @if (msg.thinking) {
+              <div class="thinking-dots">
+                <span></span><span></span><span></span>
+              </div>
+            } @else {
+              <div class="msg-content" [innerHTML]="formatMessage(msg.content)"></div>
+            }
+            <div class="msg-time">{{ formatTime(msg.timestamp) }}</div>
+          </div>
+          @if (msg.role === 'user') {
+            <div class="msg-avatar user-avatar">T</div>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Input Area -->
+    <div class="chat-input-area">
+      <div class="input-attachments" *ngIf="attachments().length > 0">
+        @for (att of attachments(); track att) {
+          <div class="attachment-chip">
+            <mat-icon>image</mat-icon>
+            <span>{{ att }}</span>
+            <button (click)="removeAttachment(att)"><mat-icon>close</mat-icon></button>
+          </div>
+        }
+      </div>
+      <div class="chat-input-wrapper">
+        <button class="input-action-btn" (click)="triggerImageUpload()" title="Upload image">
+          <mat-icon>image</mat-icon>
+        </button>
+        <button class="input-action-btn" (click)="toggleVoice()" [class.active]="voiceActive()" title="Voice input">
+          <mat-icon>{{ voiceActive() ? 'mic' : 'mic_none' }}</mat-icon>
+        </button>
+        <textarea
+          class="chat-textarea"
+          [(ngModel)]="inputText"
+          placeholder="Ask anything — crop disease, planting advice, market prices..."
+          rows="1"
+          (keydown.enter)="onEnter($event)"
+          (input)="autoResize($event)">
+        </textarea>
+        <button class="send-btn" (click)="sendMessage()" [disabled]="!inputText.trim()">
+          <mat-icon>send</mat-icon>
+        </button>
+      </div>
+      <p class="input-hint">Press Enter to send · Shift+Enter for new line · Upload a photo of your crop for disease analysis</p>
+    </div>
+  </div>
+
+  <!-- Right: Tools Panel -->
+  <aside class="tools-panel hide-mobile">
+    <h3 class="tools-title">AI Tools</h3>
+    @for (tool of aiTools; track tool.label) {
+      <a class="tool-card" [routerLink]="tool.route">
+        <div class="icon-wrap {{ tool.iconClass }}">
+          <mat-icon>{{ tool.icon }}</mat-icon>
+        </div>
+        <div class="tool-info">
+          <span class="tool-label">{{ tool.label }}</span>
+          <span class="tool-desc">{{ tool.desc }}</span>
+        </div>
+        <mat-icon class="tool-chevron">chevron_right</mat-icon>
+      </a>
+    }
+    <div class="divider"></div>
+    <h3 class="tools-title">Farm Summary</h3>
+    <div class="farm-summary">
+      <div class="summary-row"><mat-icon>grass</mat-icon><span>5 active crops</span></div>
+      <div class="summary-row"><mat-icon>wb_sunny</mat-icon><span>28°C, Partly cloudy</span></div>
+      <div class="summary-row"><mat-icon>water_drop</mat-icon><span>Humidity: 62%</span></div>
+      <div class="summary-row"><mat-icon>health_and_safety</mat-icon><span>Health: 87%</span></div>
+    </div>
+  </aside>
+</div>

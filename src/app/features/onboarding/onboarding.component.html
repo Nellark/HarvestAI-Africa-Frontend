@@ -1,0 +1,188 @@
+<div class="onboarding-layout">
+  <div class="onboarding-header">
+    <div class="logo">
+      <div class="logo-icon"><mat-icon>agriculture</mat-icon></div>
+      <span class="logo-name">HarvestAI <span style="color:var(--primary)">Africa</span></span>
+    </div>
+    <a routerLink="/app/dashboard" class="skip-link">Skip setup <mat-icon>arrow_forward</mat-icon></a>
+  </div>
+
+  <div class="onboarding-main">
+    <!-- Sidebar Steps -->
+    <div class="steps-panel hide-mobile">
+      <h3>Set up your farm</h3>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:24px">Help us personalise your experience</p>
+      <div class="steps-list">
+        @for (step of steps; track step.step; let i = $index) {
+          <div class="step-item" [class.active]="currentStep() === i" [class.done]="currentStep() > i">
+            <div class="step-dot">
+              @if (currentStep() > i) { <mat-icon>check</mat-icon> }
+              @else { {{ i + 1 }} }
+            </div>
+            <div class="step-info">
+              <span class="step-name">{{ step.title }}</span>
+              <span class="step-desc">{{ step.description }}</span>
+            </div>
+          </div>
+        }
+      </div>
+      <div class="step-progress" style="margin-top:24px">
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" [style.width]="progressPct() + '%'"></div>
+        </div>
+        <span style="font-size:12px;color:var(--text-muted);margin-top:6px;display:block">{{ progressPct() }}% complete</span>
+      </div>
+    </div>
+
+    <!-- Form Area -->
+    <div class="form-area">
+      <div class="step-header">
+        <div class="step-badge">Step {{ currentStep() + 1 }} of {{ steps.length }}</div>
+        <h2>{{ steps[currentStep()].title }}</h2>
+        <p>{{ steps[currentStep()].description }}</p>
+      </div>
+
+      <!-- Step 0: Farm Basics -->
+      @if (currentStep() === 0) {
+        <div class="step-content page-enter">
+          <div class="field-group">
+            <label>Farm Name *</label>
+            <input class="input-field" type="text" [(ngModel)]="farm.name" placeholder="e.g. Nkosi Family Farm" />
+          </div>
+          <div class="field-row-2">
+            <div class="field-group">
+              <label>Farm Size *</label>
+              <input class="input-field" type="number" [(ngModel)]="farm.size" placeholder="e.g. 12.5" />
+            </div>
+            <div class="field-group">
+              <label>Unit</label>
+              <select class="input-field" [(ngModel)]="farm.sizeUnit">
+                <option value="ha">Hectares (ha)</option>
+                <option value="acres">Acres</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Province / Region *</label>
+            <input class="input-field" type="text" [(ngModel)]="farm.province" placeholder="e.g. Limpopo" />
+          </div>
+        </div>
+      }
+
+      <!-- Step 1: Crops -->
+      @if (currentStep() === 1) {
+        <div class="step-content page-enter">
+          <p class="step-hint">Select all the crops you currently grow or plan to grow:</p>
+          <div class="crops-grid">
+            @for (crop of cropOptions; track crop.name) {
+              <button type="button" class="crop-btn" [class.selected]="isCropSelected(crop.name)" (click)="toggleCrop(crop.name)">
+                <mat-icon>{{ crop.icon }}</mat-icon>
+                <span>{{ crop.name }}</span>
+                @if (isCropSelected(crop.name)) {
+                  <mat-icon class="check-icon">check_circle</mat-icon>
+                }
+              </button>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Step 2: Livestock -->
+      @if (currentStep() === 2) {
+        <div class="step-content page-enter">
+          <p class="step-hint">Select the livestock you keep (if any):</p>
+          <div class="livestock-grid">
+            @for (animal of livestockOptions; track animal.name) {
+              <button type="button" class="crop-btn" [class.selected]="isLivestockSelected(animal.name)" (click)="toggleLivestock(animal.name)">
+                <mat-icon>{{ animal.icon }}</mat-icon>
+                <span>{{ animal.name }}</span>
+                @if (isLivestockSelected(animal.name)) {
+                  <mat-icon class="check-icon">check_circle</mat-icon>
+                }
+              </button>
+            }
+          </div>
+          <button type="button" class="btn btn-ghost" style="margin-top:16px" (click)="nextStep()">
+            <mat-icon>skip_next</mat-icon> I don't keep livestock
+          </button>
+        </div>
+      }
+
+      <!-- Step 3: Water & Soil -->
+      @if (currentStep() === 3) {
+        <div class="step-content page-enter">
+          <div class="field-group">
+            <label>Primary Water Source *</label>
+            <div class="water-options">
+              @for (w of waterSources; track w.value) {
+                <button type="button" class="option-btn" [class.selected]="farm.waterSource === w.value" (click)="farm.waterSource = w.value">
+                  <mat-icon>{{ w.icon }}</mat-icon>
+                  <span>{{ w.label }}</span>
+                </button>
+              }
+            </div>
+          </div>
+          <div class="field-group" style="margin-top:16px">
+            <label>Soil Type</label>
+            <select class="input-field" [(ngModel)]="farm.soilType">
+              @for (s of soilTypes; track s) {
+                <option [value]="s">{{ s }}</option>
+              }
+            </select>
+          </div>
+        </div>
+      }
+
+      <!-- Step 4: Preferences -->
+      @if (currentStep() === 4) {
+        <div class="step-content page-enter">
+          <div class="field-group">
+            <label>Preferred Language</label>
+            <div class="lang-options">
+              @for (l of languages; track l.code) {
+                <button type="button" class="option-btn" [class.selected]="farm.language === l.code" (click)="farm.language = l.code">
+                  <span class="lang-flag">{{ l.flag }}</span>
+                  <span>{{ l.name }}</span>
+                </button>
+              }
+            </div>
+          </div>
+          <div class="field-group" style="margin-top:20px">
+            <label>Farming Experience</label>
+            <div class="exp-options">
+              @for (e of experiences; track e.value) {
+                <button type="button" class="option-btn" [class.selected]="farm.experience === e.value" (click)="farm.experience = e.value" style="flex-direction:column;gap:4px;align-items:flex-start;padding:14px 16px">
+                  <strong style="font-size:14px">{{ e.label }}</strong>
+                  <span style="font-size:12px;color:var(--text-muted)">{{ e.desc }}</span>
+                </button>
+              }
+            </div>
+          </div>
+          <div class="field-group" style="margin-top:16px">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
+              <input type="checkbox" [(ngModel)]="farm.hasInternet" style="width:16px;height:16px" />
+              <span>I have reliable internet connectivity in my area</span>
+            </label>
+          </div>
+        </div>
+      }
+
+      <!-- Navigation -->
+      <div class="step-nav">
+        <button class="btn btn-outline" (click)="prevStep()" [disabled]="currentStep() === 0">
+          <mat-icon>arrow_back</mat-icon> Back
+        </button>
+        <div style="flex:1"></div>
+        @if (currentStep() < steps.length - 1) {
+          <button class="btn btn-primary btn-lg" (click)="nextStep()">
+            Continue <mat-icon>arrow_forward</mat-icon>
+          </button>
+        } @else {
+          <a routerLink="/app/dashboard" class="btn btn-primary btn-lg">
+            <mat-icon>rocket_launch</mat-icon> Start Using HarvestAI
+          </a>
+        }
+      </div>
+    </div>
+  </div>
+</div>

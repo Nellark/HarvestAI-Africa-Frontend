@@ -1,0 +1,152 @@
+<div class="page-enter">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Farm Planner</h1>
+          <p class="page-subtitle">Manage tasks, schedules, and AI-powered farming reminders</p>
+        </div>
+        <button class="btn btn-primary" (click)="showAdd.set(true)"><mat-icon>add</mat-icon> Add Task</button>
+      </div>
+
+      <!-- Add Task Modal -->
+      @if (showAdd()) {
+        <div class="modal-overlay" (click)="showAdd.set(false)">
+          <div class="modal-card card" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+              <h3>Add New Task</h3>
+              <button class="icon-btn" (click)="showAdd.set(false)"><mat-icon>close</mat-icon></button>
+            </div>
+            <div class="modal-body">
+              <div class="field-group">
+                <label>Task Title</label>
+                <input class="input-field" [(ngModel)]="newTask.title" placeholder="e.g. Apply fertilizer to maize" />
+              </div>
+              <div class="field-row-2">
+                <div class="field-group">
+                  <label>Category</label>
+                  <select class="input-field" [(ngModel)]="newTask.category">
+                    <option value="planting">Planting</option>
+                    <option value="irrigation">Irrigation</option>
+                    <option value="harvesting">Harvesting</option>
+                    <option value="spraying">Spraying</option>
+                    <option value="fertilizing">Fertilizing</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div class="field-group">
+                  <label>Priority</label>
+                  <select class="input-field" [(ngModel)]="newTask.priority">
+                    <option value="high">High</option>
+                    <option value="medium">Medium</option>
+                    <option value="low">Low</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field-group">
+                <label>Due Date</label>
+                <input class="input-field" type="date" [(ngModel)]="newTask.dueDate" />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-ghost" (click)="showAdd.set(false)">Cancel</button>
+              <button class="btn btn-primary" (click)="addTask()"><mat-icon>add</mat-icon> Add Task</button>
+            </div>
+          </div>
+        </div>
+      }
+
+      <div class="planner-layout">
+        <!-- Tasks List -->
+        <div class="tasks-section">
+          <!-- Filter Tabs -->
+          <div class="filter-row" style="margin-bottom:16px">
+            @for (f of statusFilters; track f) {
+              <button class="chip" [class.active]="statusFilter() === f" (click)="statusFilter.set(f)">{{ f }}</button>
+            }
+          </div>
+
+          <div class="tasks-container">
+            @for (task of filteredTasks(); track task.id) {
+              <div class="task-row card" style="padding:16px" [class.task-done]="task.status === 'done'">
+                <button class="task-check-btn {{ task.status === 'done' ? 'done' : task.status === 'in-progress' ? 'progress' : '' }}" (click)="cycleStatus(task.id)">
+                  <mat-icon>{{ task.status === 'done' ? 'check_circle' : task.status === 'in-progress' ? 'pending' : 'radio_button_unchecked' }}</mat-icon>
+                </button>
+                <div class="task-row-info">
+                  <div class="task-row-title">{{ task.title }}</div>
+                  <div class="task-row-meta">
+                    <span class="badge {{ categoryBadge(task.category) }}">{{ task.category }}</span>
+                    <span class="meta-item"><mat-icon>calendar_today</mat-icon>{{ task.dueDate }}</span>
+                  </div>
+                </div>
+                <span class="badge {{ priorityBadge(task.priority) }}">{{ task.priority }}</span>
+                <button class="icon-btn" (click)="deleteTask(task.id)"><mat-icon>delete_outline</mat-icon></button>
+              </div>
+            }
+            @if (filteredTasks().length === 0) {
+              <div class="empty-tasks">
+                <mat-icon>task_alt</mat-icon>
+                <p>No tasks in this category</p>
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Calendar & AI Planner -->
+        <div class="side-panel">
+          <!-- Mini Calendar -->
+          <div class="card mini-calendar">
+            <div class="calendar-header">
+              <button class="icon-btn" (click)="prevMonth()"><mat-icon>chevron_left</mat-icon></button>
+              <h4>{{ monthYear() }}</h4>
+              <button class="icon-btn" (click)="nextMonth()"><mat-icon>chevron_right</mat-icon></button>
+            </div>
+            <div class="cal-weekdays">
+              @for (d of ['Su','Mo','Tu','We','Th','Fr','Sa']; track d) {
+                <span>{{ d }}</span>
+              }
+            </div>
+            <div class="cal-days">
+              @for (day of calendarDays(); track day.date) {
+                <button class="cal-day" [class.today]="day.isToday" [class.has-task]="day.hasTask" [class.other-month]="!day.currentMonth">
+                  {{ day.day }}
+                </button>
+              }
+            </div>
+          </div>
+
+          <!-- Upcoming -->
+          <div class="card">
+            <h4 style="font-size:14px;font-weight:700;margin-bottom:14px">Upcoming Schedule</h4>
+            @for (t of state.tasks().slice(0, 4); track t.id) {
+              <div class="upcoming-item">
+                <div class="upcoming-date">
+                  <span class="up-day">{{ t.dueDate.split('-')[2] }}</span>
+                  <span class="up-month">{{ monthAbbr(t.dueDate) }}</span>
+                </div>
+                <div class="upcoming-info">
+                  <span class="up-title">{{ t.title }}</span>
+                  <span class="badge {{ categoryBadge(t.category) }}" style="font-size:10px">{{ t.category }}</span>
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- AI Planner -->
+          <div class="card ai-planner-card">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+              <div class="icon-wrap icon-wrap-primary" style="width:34px;height:34px;font-size:17px;border-radius:8px"><mat-icon>psychology</mat-icon></div>
+              <h4 style="font-size:14px;font-weight:700">AI Planner Suggestions</h4>
+            </div>
+            @for (s of aiSuggestions; track s.title) {
+              <div class="ai-suggestion">
+                <mat-icon>{{ s.icon }}</mat-icon>
+                <div>
+                  <div class="sug-title">{{ s.title }}</div>
+                  <div class="sug-desc">{{ s.desc }}</div>
+                </div>
+                <button class="btn btn-sm btn-outline" (click)="addAiSuggestion(s.title)">Add</button>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>

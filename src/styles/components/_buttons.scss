@@ -1,0 +1,83 @@
+// =============================================
+// HarvestAI Africa — Buttons
+// =============================================
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  transition: all var(--transition);
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+  &:hover {
+    background: var(--primary-dark);
+    box-shadow: 0 4px 16px rgba(46,125,50,0.3);
+    transform: translateY(-1px);
+    text-decoration: none;
+    color: #fff;
+  }
+}
+
+.btn-accent {
+  background: var(--accent);
+  color: var(--primary-dark);
+  &:hover {
+    background: var(--accent-dark);
+    transform: translateY(-1px);
+    text-decoration: none;
+  }
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--primary);
+  border: 2px solid var(--primary);
+  &:hover {
+    background: var(--primary);
+    color: #fff;
+    transform: translateY(-1px);
+    text-decoration: none;
+  }
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  &:hover {
+    background: var(--bg-subtle);
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+}
+
+.btn-lg {
+  padding: 14px 28px;
+  font-size: 15px;
+  border-radius: var(--radius);
+}
+
+.btn-sm {
+  padding: 6px 14px;
+  font-size: 12px;
+  border-radius: var(--radius-sm);
+}

@@ -1,0 +1,90 @@
+<div class="page-enter">
+      <div class="page-header">
+        <div>
+          <div class="badge badge-danger" style="margin-bottom:8px">Admin Panel</div>
+          <h1 class="page-title">Platform Overview</h1>
+          <p class="page-subtitle">HarvestAI Africa · Super Admin Dashboard</p>
+        </div>
+      </div>
+
+      <!-- Admin KPIs -->
+      <div class="admin-kpi-grid">
+        @for (kpi of kpis; track kpi.label) {
+          <div class="kpi-card card">
+            <div class="kpi-icon icon-wrap {{ kpi.iconClass }}"><mat-icon>{{ kpi.icon }}</mat-icon></div>
+            <div class="kpi-val">{{ kpi.value }}</div>
+            <div class="kpi-label">{{ kpi.label }}</div>
+            <div class="kpi-change trend-up"><mat-icon>arrow_upward</mat-icon>{{ kpi.change }}% this month</div>
+          </div>
+        }
+      </div>
+
+      <div class="admin-grid">
+        <!-- User Stats -->
+        <div class="card">
+          <h3 style="margin-bottom:16px">Farmers by Country</h3>
+          @for (c of countryStats; track c.country) {
+            <div class="country-row">
+              <span class="country-flag">{{ c.flag }}</span>
+              <span class="country-name">{{ c.country }}</span>
+              <div class="country-bar-wrap">
+                <div class="country-bar" [style.width]="(c.farmers / 8000 * 100) + '%'"></div>
+              </div>
+              <span class="country-count">{{ c.farmers.toLocaleString() }}</span>
+            </div>
+          }
+        </div>
+
+        <!-- Disease Reports -->
+        <div class="card">
+          <h3 style="margin-bottom:16px">Top Disease Reports (30 days)</h3>
+          @for (d of diseaseReports; track d.name) {
+            <div class="disease-admin-row">
+              <div class="icon-wrap icon-wrap-danger" style="width:34px;height:34px;font-size:17px;border-radius:8px;flex-shrink:0"><mat-icon>bug_report</mat-icon></div>
+              <div style="flex:1">
+                <div style="font-size:13.5px;font-weight:600">{{ d.name }}</div>
+                <div class="progress-bar-track" style="margin-top:4px;height:4px">
+                  <div class="progress-bar-fill" [style.width]="d.pct + '%'" style="background:var(--danger)"></div>
+                </div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:13.5px;font-weight:700">{{ d.reports }}</div>
+                <div style="font-size:11px;color:var(--text-muted)">reports</div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Users Table -->
+      <div class="card" style="margin-top:0">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+          <h3>Recent Farmer Registrations</h3>
+          <button class="btn btn-outline btn-sm"><mat-icon>download</mat-icon> Export CSV</button>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Country</th>
+              <th>Farm Size</th>
+              <th>Crops</th>
+              <th>Registered</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (u of recentUsers; track u.name) {
+              <tr>
+                <td><div class="user-cell"><div class="user-avatar-sm">{{ u.name.charAt(0) }}</div>{{ u.name }}</div></td>
+                <td>{{ u.country }}</td>
+                <td>{{ u.farmSize }}</td>
+                <td>{{ u.crops }}</td>
+                <td>{{ u.registered }}</td>
+                <td><span class="badge badge-success">Active</span></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>

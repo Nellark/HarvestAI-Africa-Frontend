@@ -1,0 +1,171 @@
+<div class="page-enter">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">My Farm</h1>
+          <p class="page-subtitle">{{ state.farm()?.name }} · {{ state.farm()?.size }} {{ state.farm()?.sizeUnit }} · {{ state.farm()?.province }}, {{ state.farm()?.country }}</p>
+        </div>
+        <button class="btn btn-primary"><mat-icon>edit</mat-icon> Edit Farm</button>
+      </div>
+
+      <!-- Farm Hero -->
+      <div class="farm-hero card" style="padding:0;overflow:hidden;margin-bottom:24px">
+        <img [src]="state.farm()?.image" alt="Farm" class="farm-hero-img" />
+        <div class="farm-hero-overlay">
+          <div class="farm-hero-info">
+            <h2>{{ state.farm()?.name }}</h2>
+            <p>{{ state.farm()?.province }}, {{ state.farm()?.country }}</p>
+            <div class="farm-meta">
+              <span class="badge badge-success"><mat-icon>yard</mat-icon>{{ state.farm()?.size }} {{ state.farm()?.sizeUnit }}</span>
+              <span class="badge badge-info"><mat-icon>water_drop</mat-icon>{{ state.farm()?.waterSource }}</span>
+              <span class="badge badge-neutral"><mat-icon>landscape</mat-icon>{{ state.farm()?.soilType }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs" style="margin-bottom:24px">
+        @for (tab of tabs; track tab.id) {
+          <button class="tab-btn" [class.active]="activeTab() === tab.id" (click)="activeTab.set(tab.id)">
+            <mat-icon>{{ tab.icon }}</mat-icon> {{ tab.label }}
+          </button>
+        }
+      </div>
+
+      <!-- Crops Tab -->
+      @if (activeTab() === 'crops') {
+        <div class="page-enter">
+          <div class="crops-grid">
+            @for (crop of state.farm()?.crops; track crop.id) {
+              <div class="crop-card card">
+                <div class="crop-card-header">
+                  <div class="icon-wrap icon-wrap-primary" style="width:48px;height:48px;font-size:24px;border-radius:12px">
+                    <mat-icon>{{ crop.icon }}</mat-icon>
+                  </div>
+                  <span class="badge {{ statusBadgeClass(crop.status) }}">{{ crop.status }}</span>
+                </div>
+                <h3 class="crop-card-name">{{ crop.name }}</h3>
+                <p class="crop-variety">{{ crop.variety || 'Standard variety' }}</p>
+                <div class="crop-details">
+                  <div class="crop-detail">
+                    <mat-icon>crop_square</mat-icon>
+                    <span>{{ crop.area }} {{ crop.areaUnit }}</span>
+                  </div>
+                  <div class="crop-detail">
+                    <mat-icon>calendar_today</mat-icon>
+                    <span>Planted {{ crop.plantedDate }}</span>
+                  </div>
+                  <div class="crop-detail">
+                    <mat-icon>event_available</mat-icon>
+                    <span>Harvest {{ crop.expectedHarvestDate }}</span>
+                  </div>
+                </div>
+                <div class="health-row">
+                  <span class="health-label">Health Score</span>
+                  <span class="health-val" [style.color]="healthColor(crop.healthScore)">{{ crop.healthScore }}%</span>
+                </div>
+                <div class="progress-bar-track">
+                  <div class="progress-bar-fill" [style.width]="crop.healthScore + '%'" [style.background]="healthColor(crop.healthScore)"></div>
+                </div>
+                <div class="crop-actions" style="margin-top:16px;display:flex;gap:8px">
+                  <a routerLink="/app/disease-detection" class="btn btn-sm btn-outline" style="flex:1;justify-content:center">
+                    <mat-icon>biotech</mat-icon> Scan
+                  </a>
+                  <a routerLink="/app/ai-assistant" class="btn btn-sm btn-ghost" style="flex:1;justify-content:center">
+                    <mat-icon>psychology</mat-icon> Advise
+                  </a>
+                </div>
+              </div>
+            }
+            <!-- Add Crop Card -->
+            <div class="add-card card" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:280px;border:2px dashed var(--border);box-shadow:none">
+              <mat-icon style="font-size:36px;color:var(--text-muted);margin-bottom:8px">add_circle_outline</mat-icon>
+              <span style="font-size:14px;color:var(--text-muted);font-weight:500">Add New Crop</span>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Livestock Tab -->
+      @if (activeTab() === 'livestock') {
+        <div class="page-enter">
+          <div class="livestock-grid">
+            @for (animal of state.farm()?.livestock; track animal.id) {
+              <div class="livestock-card card">
+                <div class="livestock-icon icon-wrap icon-wrap-warning" style="width:52px;height:52px;font-size:26px;border-radius:12px;margin-bottom:12px">
+                  <mat-icon>pets</mat-icon>
+                </div>
+                <h3>{{ animal.type }}</h3>
+                <p style="color:var(--text-secondary);font-size:13px;margin-bottom:12px">{{ animal.breed || 'Unknown breed' }}</p>
+                <div class="livestock-count">
+                  <span class="count-value">{{ animal.count }}</span>
+                  <span class="count-label">animals</span>
+                </div>
+                <div class="health-row" style="margin-top:12px">
+                  <span class="health-label">Health Status</span>
+                  <span class="badge {{ animal.healthStatus === 'good' ? 'badge-success' : animal.healthStatus === 'fair' ? 'badge-warning' : 'badge-danger' }}">{{ animal.healthStatus }}</span>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Soil Tab -->
+      @if (activeTab() === 'soil') {
+        <div class="page-enter">
+          <div class="grid-2">
+            <div class="card">
+              <h3 style="margin-bottom:16px">Soil Information</h3>
+              @for (info of soilInfo; track info.label) {
+                <div class="info-row">
+                  <span class="info-label">{{ info.label }}</span>
+                  <span class="info-value">{{ info.value }}</span>
+                </div>
+              }
+            </div>
+            <div class="card">
+              <h3 style="margin-bottom:16px">Water Sources</h3>
+              @for (ws of waterSourceInfo; track ws.label) {
+                <div class="info-row">
+                  <div style="display:flex;align-items:center;gap:8px">
+                    <mat-icon style="font-size:18px;color:var(--primary)">{{ ws.icon }}</mat-icon>
+                    <span class="info-label">{{ ws.label }}</span>
+                  </div>
+                  <span class="badge badge-success">{{ ws.status }}</span>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Expenses Tab -->
+      @if (activeTab() === 'expenses') {
+        <div class="page-enter">
+          <div class="card">
+            <div class="card-header">
+              <h3>Season Expenses</h3>
+              <span class="stat-value" style="font-size:20px">R 24,850</span>
+            </div>
+            @for (e of expenses; track e.category) {
+              <div class="expense-row">
+                <div class="icon-wrap {{ e.iconClass }}" style="width:36px;height:36px;font-size:18px;border-radius:8px;flex-shrink:0">
+                  <mat-icon>{{ e.icon }}</mat-icon>
+                </div>
+                <div style="flex:1">
+                  <div style="font-size:13.5px;font-weight:600">{{ e.category }}</div>
+                  <div class="progress-bar-track" style="margin-top:4px;height:4px">
+                    <div class="progress-bar-fill" [style.width]="e.pct + '%'"></div>
+                  </div>
+                </div>
+                <div style="text-align:right">
+                  <div style="font-size:13.5px;font-weight:700">R {{ e.amount.toLocaleString() }}</div>
+                  <div style="font-size:11px;color:var(--text-muted)">{{ e.pct }}%</div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>

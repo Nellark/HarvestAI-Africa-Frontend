@@ -1,0 +1,83 @@
+<div class="auth-layout">
+      <div class="auth-side hide-mobile">
+        <div class="auth-side-content">
+          <div class="logo" style="margin-bottom:40px">
+            <div class="logo-icon"><mat-icon>agriculture</mat-icon></div>
+            <span class="logo-name">HarvestAI <span class="logo-africa">Africa</span></span>
+          </div>
+          <h2>Grow smarter with AI</h2>
+          <p>Join thousands of African farmers using AI to improve yields, detect diseases early, and access better markets.</p>
+          <div class="auth-features">
+            @for (f of features; track f.text) {
+              <div class="auth-feature">
+                <div class="auth-feature-icon"><mat-icon>{{ f.icon }}</mat-icon></div>
+                <span>{{ f.text }}</span>
+              </div>
+            }
+          </div>
+          <img src="https://images.unsplash.com/photo-1592982537447-7440770cbfc9?w=500&h=300&fit=crop" alt="Farming" class="auth-illustration" />
+        </div>
+      </div>
+      <div class="auth-main">
+        <div class="auth-form-wrapper">
+          <div class="auth-header">
+            <a routerLink="/" class="logo hide-desktop" style="display:flex;align-items:center;gap:8px;margin-bottom:32px;text-decoration:none">
+              <div class="logo-icon"><mat-icon>agriculture</mat-icon></div>
+              <span class="logo-name">HarvestAI <span class="logo-africa">Africa</span></span>
+            </a>
+            <h1>Welcome back</h1>
+            <p>Sign in to your HarvestAI account</p>
+          </div>
+
+          <div class="auth-lang">
+            @for (l of languages; track l.code) {
+              <button class="chip" [class.active]="lang() === l.code" (click)="lang.set(l.code)">{{ l.name }}</button>
+            }
+          </div>
+
+          <form class="auth-form" (ngSubmit)="onLogin()">
+            <div class="field-group">
+              <label>Email Address</label>
+              <div class="input-wrapper">
+                <mat-icon class="input-icon">email</mat-icon>
+                <input class="input-field with-icon" type="email" [(ngModel)]="email" name="email" placeholder="thabo@example.com" required />
+              </div>
+            </div>
+            <div class="field-group">
+              <label>Password</label>
+              <div class="input-wrapper">
+                <mat-icon class="input-icon">lock</mat-icon>
+                <input class="input-field with-icon" [type]="showPwd() ? 'text' : 'password'" [(ngModel)]="password" name="password" placeholder="••••••••" required />
+                <button type="button" class="input-suffix" (click)="togglePwd()">
+                  <mat-icon>{{ showPwd() ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+              </div>
+            </div>
+            <div class="field-row">
+              <label class="checkbox-label">
+                <input type="checkbox" [(ngModel)]="remember" name="remember" /> Remember me
+              </label>
+              <a routerLink="/auth/forgot-password" class="forgot-link">Forgot password?</a>
+            </div>
+            @if (error()) {
+              <div class="auth-error"><mat-icon>error_outline</mat-icon>{{ error() }}</div>
+            }
+            <button type="submit" class="btn btn-primary w-full btn-lg" [class.loading]="loading()">
+              @if (loading()) { <span class="spinner"></span> Signing in... }
+              @else { <mat-icon>login</mat-icon> Sign In }
+            </button>
+          </form>
+
+          <div class="auth-divider"><span>or</span></div>
+
+          <div class="social-auth">
+            <button class="social-btn-auth"><mat-icon>phone</mat-icon> Continue with Phone</button>
+            <button class="social-btn-auth"><mat-icon>language</mat-icon> Continue with Google</button>
+          </div>
+
+          <p class="auth-footer-text">
+            Don't have an account? <a routerLink="/auth/register">Create one free</a>
+          </p>
+        </div>
+      </div>
+    </div>

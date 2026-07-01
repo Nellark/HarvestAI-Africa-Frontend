@@ -1,0 +1,253 @@
+<!-- Navigation -->
+    <nav class="landing-nav glass">
+      <div class="container">
+        <div class="nav-inner">
+          <div class="logo">
+            <div class="logo-icon"><mat-icon>agriculture</mat-icon></div>
+            <span class="logo-name">HarvestAI <span class="logo-africa">Africa</span></span>
+          </div>
+          <div class="nav-links hide-mobile">
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#testimonials">Stories</a>
+            <a href="#faq">FAQ</a>
+          </div>
+          <div class="nav-actions">
+            <a routerLink="/auth/login" class="btn btn-ghost btn-sm">Sign In</a>
+            <a routerLink="/auth/register" class="btn btn-primary btn-sm">Get Started Free</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero-section">
+      <div class="hero-bg"></div>
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <mat-icon>auto_awesome</mat-icon>
+            AI-Powered Agriculture for Africa
+          </div>
+          <h1 class="hero-title">
+            Empowering African<br>
+            <span class="gradient-text">Farmers with AI</span>
+          </h1>
+          <p class="hero-subtitle">
+            HarvestAI Africa brings cutting-edge artificial intelligence to smallholder and commercial farmers across the continent — improving yields, detecting diseases early, and connecting you to better markets.
+          </p>
+          <div class="hero-actions">
+            <a routerLink="/auth/register" class="btn btn-primary btn-lg">
+              <mat-icon>rocket_launch</mat-icon>
+              Start for Free
+            </a>
+            <a routerLink="/app/dashboard" class="btn btn-outline btn-lg">
+              <mat-icon>play_circle</mat-icon>
+              Live Demo
+            </a>
+          </div>
+          <div class="hero-stats">
+            @for (stat of heroStats; track stat.label) {
+              <div class="hero-stat">
+                <span class="hero-stat-value">{{ stat.value }}</span>
+                <span class="hero-stat-label">{{ stat.label }}</span>
+              </div>
+            }
+          </div>
+        </div>
+        <div class="hero-image">
+          <div class="hero-img-wrapper">
+            <img src="https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=700&h=500&fit=crop" alt="African farmer in field" />
+            <div class="hero-card ai-card glass">
+              <div class="ai-card-icon"><mat-icon>psychology</mat-icon></div>
+              <div class="ai-card-text">
+                <strong>AI Analysis Complete</strong>
+                <span>Maize yield up 42% projected</span>
+              </div>
+            </div>
+            <div class="hero-card weather-card glass">
+              <mat-icon style="color:#f59e0b">wb_sunny</mat-icon>
+              <div>
+                <strong>28°C</strong><br>
+                <span style="font-size:11px">Polokwane, SA</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trusted By -->
+    <section class="partners-section">
+      <div class="container">
+        <p class="partners-label">Trusted by farmers across Africa</p>
+        <div class="partners-grid">
+          @for (c of countries; track c) {
+            <div class="partner-item">
+              <mat-icon>location_on</mat-icon>
+              <span>{{ c }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section" id="features">
+      <div class="container">
+        <div class="section-header">
+          <div class="badge badge-primary">Features</div>
+          <h2 class="section-title">Everything a modern farmer needs</h2>
+          <p class="section-sub">From disease detection to market insights, HarvestAI has you covered end-to-end.</p>
+        </div>
+        <div class="features-grid">
+          @for (f of features; track f.title) {
+            <div class="feature-card card">
+              <div class="feature-icon icon-wrap" [style.background]="f.bgColor" [style.color]="f.color">
+                <mat-icon>{{ f.icon }}</mat-icon>
+              </div>
+              <h3 class="feature-title">{{ f.title }}</h3>
+              <p class="feature-desc">{{ f.description }}</p>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section how-section" id="how-it-works">
+      <div class="container">
+        <div class="section-header">
+          <div class="badge badge-primary">How It Works</div>
+          <h2 class="section-title">Up and running in minutes</h2>
+          <p class="section-sub">Getting started is simple — no technical knowledge required.</p>
+        </div>
+        <div class="steps-grid">
+          @for (step of steps; track step.step) {
+            <div class="step-card">
+              <div class="step-number">{{ step.step }}</div>
+              <div class="step-icon"><mat-icon>{{ step.icon }}</mat-icon></div>
+              <h3>{{ step.title }}</h3>
+              <p>{{ step.description }}</p>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section testimonials-section" id="testimonials">
+      <div class="container">
+        <div class="section-header">
+          <div class="badge badge-primary">Success Stories</div>
+          <h2 class="section-title">Farmers love HarvestAI</h2>
+        </div>
+        <div class="testimonials-grid">
+          @for (t of testimonials; track t.name) {
+            <div class="testimonial-card card">
+              <div class="quote-icon">"</div>
+              <p class="testimonial-text">{{ t.quote }}</p>
+              <div class="testimonial-author">
+                <img [src]="t.avatar" [alt]="t.name" class="testimonial-avatar" />
+                <div>
+                  <strong>{{ t.name }}</strong>
+                  <span>{{ t.location }}</span>
+                </div>
+              </div>
+              <div class="testimonial-crop badge badge-success">{{ t.crop }}</div>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats-section">
+      <div class="container">
+        <div class="stats-grid">
+          @for (s of platformStats; track s.label) {
+            <div class="platform-stat">
+              <div class="platform-stat-value">{{ s.value }}</div>
+              <div class="platform-stat-label">{{ s.label }}</div>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section" id="faq">
+      <div class="container container-sm">
+        <div class="section-header">
+          <div class="badge badge-primary">FAQ</div>
+          <h2 class="section-title">Common Questions</h2>
+        </div>
+        <div class="faq-list">
+          @for (q of faqs; track q.question; let i = $index) {
+            <div class="faq-item" [class.open]="openFaq === i">
+              <button class="faq-question" (click)="openFaq = openFaq === i ? -1 : i">
+                {{ q.question }}
+                <mat-icon>{{ openFaq === i ? 'expand_less' : 'expand_more' }}</mat-icon>
+              </button>
+              @if (openFaq === i) {
+                <div class="faq-answer">{{ q.answer }}</div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-content">
+          <h2>Start growing smarter today</h2>
+          <p>Join thousands of African farmers already using HarvestAI to improve their yields and livelihoods.</p>
+          <div class="cta-actions">
+            <a routerLink="/auth/register" class="btn btn-accent btn-lg">
+              <mat-icon>agriculture</mat-icon> Create Free Account
+            </a>
+            <a routerLink="/app/dashboard" class="btn btn-lg" style="background:rgba(255,255,255,0.2);color:#fff;border:1.5px solid rgba(255,255,255,0.4)">
+              <mat-icon>play_circle</mat-icon> View Demo
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <div class="logo" style="margin-bottom:12px">
+              <div class="logo-icon"><mat-icon>agriculture</mat-icon></div>
+              <span class="logo-name">HarvestAI <span class="logo-africa">Africa</span></span>
+            </div>
+            <p>Empowering African farmers with the power of artificial intelligence.</p>
+            <div class="footer-social">
+              @for (s of ['twitter', 'facebook', 'instagram', 'youtube']; track s) {
+                <a href="#" class="social-btn"><mat-icon>{{ s }}</mat-icon></a>
+              }
+            </div>
+          </div>
+          @for (col of footerLinks; track col.title) {
+            <div class="footer-col">
+              <h4>{{ col.title }}</h4>
+              @for (link of col.links; track link) {
+                <a href="#">{{ link }}</a>
+              }
+            </div>
+          }
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2026 HarvestAI Africa. All rights reserved.</p>
+          <div class="footer-lang">
+            @for (l of languages; track l.code) {
+              <button class="chip" [class.active]="selectedLang === l.code" (click)="selectedLang = l.code">{{ l.name }}</button>
+            }
+          </div>
+        </div>
+      </div>
+    </footer>

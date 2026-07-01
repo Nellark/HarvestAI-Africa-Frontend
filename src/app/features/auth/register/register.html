@@ -1,0 +1,93 @@
+<div class="auth-layout">
+      <div class="auth-side hide-mobile">
+        <div class="auth-side-content">
+          <div class="logo" style="margin-bottom:40px">
+            <div class="logo-icon"><mat-icon>agriculture</mat-icon></div>
+            <span class="logo-name">HarvestAI <span class="logo-africa">Africa</span></span>
+          </div>
+          <h2>Start growing smarter</h2>
+          <p>Create your free account and get instant access to AI-powered tools built specifically for African farmers.</p>
+          <div class="auth-stats">
+            @for (s of stats; track s.label) {
+              <div class="auth-stat">
+                <strong>{{ s.value }}</strong>
+                <span>{{ s.label }}</span>
+              </div>
+            }
+          </div>
+          <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=500&h=280&fit=crop" alt="Farm" class="auth-illustration" />
+        </div>
+      </div>
+      <div class="auth-main">
+        <div class="auth-form-wrapper">
+          <div class="auth-header">
+            <h1>Create your account</h1>
+            <p>Free forever — upgrade when you're ready</p>
+          </div>
+          <form class="auth-form" (ngSubmit)="onRegister()">
+            <div class="field-row-2">
+              <div class="field-group">
+                <label>First Name</label>
+                <input class="input-field" type="text" [(ngModel)]="firstName" name="firstName" placeholder="Thabo" />
+              </div>
+              <div class="field-group">
+                <label>Last Name</label>
+                <input class="input-field" type="text" [(ngModel)]="lastName" name="lastName" placeholder="Nkosi" />
+              </div>
+            </div>
+            <div class="field-group">
+              <label>Email</label>
+              <div class="input-wrapper">
+                <mat-icon class="input-icon">email</mat-icon>
+                <input class="input-field with-icon" type="email" [(ngModel)]="email" name="email" placeholder="thabo@example.com" />
+              </div>
+            </div>
+            <div class="field-group">
+              <label>Phone Number</label>
+              <div class="input-wrapper">
+                <mat-icon class="input-icon">phone</mat-icon>
+                <input class="input-field with-icon" type="tel" [(ngModel)]="phone" name="phone" placeholder="+27 82 456 7890" />
+              </div>
+            </div>
+            <div class="field-group">
+              <label>Country</label>
+              <div class="input-wrapper">
+                <mat-icon class="input-icon">location_on</mat-icon>
+                <select class="input-field with-icon" [(ngModel)]="country" name="country">
+                  @for (c of countries; track c) {
+                    <option [value]="c">{{ c }}</option>
+                  }
+                </select>
+              </div>
+            </div>
+            <div class="field-group">
+              <label>Password</label>
+              <div class="input-wrapper">
+                <mat-icon class="input-icon">lock</mat-icon>
+                <input class="input-field with-icon" [type]="showPwd() ? 'text' : 'password'" [(ngModel)]="password" name="password" placeholder="Min. 8 characters" />
+                <button type="button" class="input-suffix" (click)="togglePwd()">
+                  <mat-icon>{{ showPwd() ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+              </div>
+              <div class="password-strength">
+                <div class="strength-bars">
+                  @for (i of [1,2,3,4]; track i) {
+                    <div class="strength-bar" [class.filled]="passwordStrength() >= i" [style.background]="strengthColor()"></div>
+                  }
+                </div>
+                <span class="strength-label" [style.color]="strengthColor()">{{ strengthLabel() }}</span>
+              </div>
+            </div>
+            <label class="checkbox-label" style="font-size:13px">
+              <input type="checkbox" [(ngModel)]="agree" name="agree" />
+              I agree to the <a href="#" class="text-primary">Terms of Service</a> and <a href="#" class="text-primary">Privacy Policy</a>
+            </label>
+            <button type="submit" class="btn btn-primary w-full btn-lg" [class.loading]="loading()" [disabled]="!agree">
+              @if (loading()) { <span class="spinner"></span> Creating account... }
+              @else { <mat-icon>person_add</mat-icon> Create Free Account }
+            </button>
+          </form>
+          <p class="auth-footer-text">Already have an account? <a routerLink="/auth/login">Sign in</a></p>
+        </div>
+      </div>
+    </div>

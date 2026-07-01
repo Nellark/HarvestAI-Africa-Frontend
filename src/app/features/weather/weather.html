@@ -1,0 +1,113 @@
+<div class="page-enter">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Weather Intelligence</h1>
+          <p class="page-subtitle">{{ state.weather()?.location }} · Last updated just now</p>
+        </div>
+        <button class="btn btn-outline"><mat-icon>refresh</mat-icon> Refresh</button>
+      </div>
+
+      <!-- Current Weather Hero -->
+      <div class="weather-hero card">
+        <div class="weather-hero-bg"></div>
+        <div class="weather-hero-content">
+          <div class="weather-main-info">
+            <div class="temp-display">
+              <span class="temp-value">{{ state.weather()?.temperature }}°</span>
+              <span class="temp-unit">C</span>
+            </div>
+            <div class="weather-details-main">
+              <h2>{{ state.weather()?.condition }}</h2>
+              <p class="weather-location"><mat-icon>location_on</mat-icon>{{ state.weather()?.location }}</p>
+              <p class="feels-like">Feels like {{ state.weather()?.feelsLike }}°C</p>
+            </div>
+          </div>
+          <div class="weather-stats-row">
+            @for (stat of currentStats; track stat.label) {
+              <div class="weather-stat-item">
+                <mat-icon>{{ stat.icon }}</mat-icon>
+                <div>
+                  <span class="ws-value">{{ stat.value }}</span>
+                  <span class="ws-label">{{ stat.label }}</span>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- 7-Day Forecast -->
+      <div class="card" style="margin-bottom:24px">
+        <h3 style="margin-bottom:16px">7-Day Forecast</h3>
+        <div class="forecast-grid">
+          @for (day of state.weather()?.forecast; track day.day) {
+            <div class="forecast-card" [class.alert]="day.rain > 60">
+              <span class="day-name">{{ day.day }}</span>
+              <mat-icon class="day-icon">{{ day.icon }}</mat-icon>
+              <span class="day-condition">{{ day.condition }}</span>
+              <div class="day-temps">
+                <span class="day-high">{{ day.high }}°</span>
+                <span class="day-low">{{ day.low }}°</span>
+              </div>
+              @if (day.rain > 0) {
+                <div class="rain-chance" [class.high-rain]="day.rain > 60">
+                  <mat-icon>water_drop</mat-icon> {{ day.rain }}%
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="weather-bottom-grid">
+        <!-- AI Farm Recommendations -->
+        <div class="card">
+          <h3 style="margin-bottom:16px"><mat-icon style="font-size:20px;vertical-align:middle;color:var(--primary)">psychology</mat-icon> AI Farm Recommendations</h3>
+          @for (rec of aiRecs; track rec.title) {
+            <div class="ai-rec-weather">
+              <div class="icon-wrap {{ rec.iconClass }}" style="width:40px;height:40px;font-size:20px;border-radius:10px;flex-shrink:0">
+                <mat-icon>{{ rec.icon }}</mat-icon>
+              </div>
+              <div class="rec-content">
+                <div class="rec-day">{{ rec.day }}</div>
+                <div class="rec-title">{{ rec.title }}</div>
+                <div class="rec-desc">{{ rec.description }}</div>
+              </div>
+              <span class="badge {{ rec.badgeClass }}">{{ rec.priority }}</span>
+            </div>
+          }
+        </div>
+
+        <!-- Weather Alerts -->
+        <div class="card">
+          <h3 style="margin-bottom:16px">Weather Alerts</h3>
+          @for (alert of weatherAlerts; track alert.title) {
+            <div class="weather-alert-card {{ alert.severity }}">
+              <div class="alert-header">
+                <mat-icon>{{ alert.icon }}</mat-icon>
+                <h4>{{ alert.title }}</h4>
+                <span class="badge {{ alert.badgeClass }}">{{ alert.severity }}</span>
+              </div>
+              <p>{{ alert.description }}</p>
+              <span class="alert-time">{{ alert.time }}</span>
+            </div>
+          }
+
+          <!-- Humidity & Rain Chart Placeholder -->
+          <div style="margin-top:24px">
+            <h4 style="font-size:14px;margin-bottom:12px">Rainfall Probability (7 days)</h4>
+            <div class="rain-bars">
+              @for (day of state.weather()?.forecast; track day.day) {
+                <div class="rain-bar-item">
+                  <div class="rain-bar-fill-wrap">
+                    <div class="rain-bar-fill" [style.height]="day.rain + '%'" [class.high]="day.rain > 60"></div>
+                  </div>
+                  <span>{{ day.day }}</span>
+                  <span class="rain-pct">{{ day.rain }}%</span>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

@@ -1,0 +1,82 @@
+<div class="page-enter">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Marketplace</h1>
+          <p class="page-subtitle">Buy inputs, sell produce, and connect with verified vendors across Africa</p>
+        </div>
+        <button class="btn btn-primary"><mat-icon>add</mat-icon> List Your Product</button>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs" style="margin-bottom:20px">
+        @for (tab of tabs; track tab.id) {
+          <button class="tab-btn" [class.active]="activeTab() === tab.id" (click)="activeTab.set(tab.id)">
+            <mat-icon>{{ tab.icon }}</mat-icon> {{ tab.label }}
+          </button>
+        }
+      </div>
+
+      <!-- Search & Filters -->
+      <div class="marketplace-toolbar card" style="padding:16px;margin-bottom:20px">
+        <div class="search-wrap">
+          <mat-icon>search</mat-icon>
+          <input class="search-input" [(ngModel)]="searchTerm" placeholder="Search products, sellers..." />
+        </div>
+        <div class="category-chips">
+          @for (c of categories; track c.id) {
+            <button class="chip" [class.active]="activeCategory() === c.id" (click)="activeCategory.set(c.id)">
+              <mat-icon>{{ c.icon }}</mat-icon> {{ c.label }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="products-grid">
+        @for (item of filteredItems(); track item.id) {
+          <div class="product-card card">
+            <div class="product-img-wrap">
+              <img [src]="item.image" [alt]="item.title" />
+              @if (item.verified) {
+                <span class="verified-badge"><mat-icon>verified</mat-icon></span>
+              }
+              <div class="product-category-badge">{{ item.category }}</div>
+            </div>
+            <div class="product-body">
+              <h3 class="product-title">{{ item.title }}</h3>
+              <p class="product-desc">{{ item.description | slice:0:80 }}...</p>
+              <div class="product-seller">
+                <mat-icon>store</mat-icon>
+                <span>{{ item.seller }}</span>
+                <span class="seller-loc"><mat-icon>location_on</mat-icon>{{ item.location | slice:0:20 }}</span>
+              </div>
+              <div class="product-footer">
+                <div class="product-price">
+                  <span class="price-val">R {{ item.price < 100 ? item.price.toFixed(2) : item.price.toLocaleString() }}</span>
+                  <span class="price-unit">/{{ item.unit }}</span>
+                </div>
+                <div class="product-rating">
+                  <mat-icon>star</mat-icon>
+                  <span>{{ item.rating }}</span>
+                  <span class="review-count">({{ item.reviews }})</span>
+                </div>
+              </div>
+              <div class="product-actions">
+                <button class="btn btn-primary btn-sm w-full" style="justify-content:center">
+                  <mat-icon>shopping_cart</mat-icon> {{ item.category === 'produce' ? 'Buy Now' : 'Order' }}
+                </button>
+                <button class="btn btn-ghost btn-sm"><mat-icon>favorite_border</mat-icon></button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      @if (filteredItems().length === 0) {
+        <div class="empty-state card" style="text-align:center;padding:64px">
+          <mat-icon style="font-size:48px;color:var(--text-muted);margin-bottom:12px">inventory_2</mat-icon>
+          <h3>No products found</h3>
+          <p style="color:var(--text-secondary)">Try adjusting your filters or search term</p>
+        </div>
+      }
+    </div>
