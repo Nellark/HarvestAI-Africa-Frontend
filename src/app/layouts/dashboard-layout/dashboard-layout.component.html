@@ -145,9 +145,6 @@
         <button class="action-btn" (click)="notifOpen.set(!notifOpen())" [matTooltip]="'Notifications'">
           <mat-icon [matBadge]="state.unreadNotifications() || null" matBadgeColor="warn" matBadgeSize="small">notifications</mat-icon>
         </button>
-        <button class="action-btn" routerLink="/app/ai-assistant" [matTooltip]="'AI Assistant'">
-          <mat-icon>psychology</mat-icon>
-        </button>
         <div class="topbar-avatar" [matMenuTriggerFor]="topUserMenu">
           <div class="avatar" style="width:36px;height:36px;font-size:13px;cursor:pointer">
             @if (state.user()?.avatar) {

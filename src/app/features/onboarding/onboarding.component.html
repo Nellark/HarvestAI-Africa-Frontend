@@ -46,22 +46,8 @@
       @if (currentStep() === 0) {
         <div class="step-content page-enter">
           <div class="field-group">
-            <label>Your full name *</label>
-            <input class="input-field" type="text" [(ngModel)]="personalDetails.fullName" placeholder="e.g. Yonela Kulati" />
-          </div>
-          <div class="field-row-2">
-            <div class="field-group">
-              <label>Email address *</label>
-              <input class="input-field" type="email" [(ngModel)]="personalDetails.email" placeholder="you@example.com" />
-            </div>
-            <div class="field-group">
-              <label>Phone number</label>
-              <input class="input-field" type="tel" [(ngModel)]="personalDetails.phone" placeholder="e.g. +27 82 123 4567" />
-            </div>
-          </div>
-          <div class="field-group">
-            <label>Farm Name *</label>
-            <input class="input-field" type="text" [(ngModel)]="farm.name" placeholder="e.g. Mphago Family Farm" />
+            <label>Province / Region *</label>
+            <input class="input-field" type="text" [(ngModel)]="farm.province" placeholder="e.g. Limpopo" />
           </div>
           <div class="field-row-2">
             <div class="field-group">
@@ -74,16 +60,6 @@
                 <option value="ha">Hectares (ha)</option>
                 <option value="acres">Acres</option>
               </select>
-            </div>
-          </div>
-          <div class="field-row-2">
-            <div class="field-group">
-              <label>Province / Region *</label>
-              <input class="input-field" type="text" [(ngModel)]="farm.province" placeholder="e.g. Limpopo" />
-            </div>
-            <div class="field-group">
-              <label>Country</label>
-              <input class="input-field" type="text" [(ngModel)]="personalDetails.country" placeholder="e.g. South Africa" />
             </div>
           </div>
         </div>
@@ -107,90 +83,6 @@
                 }
               </button>
             }
-          </div>
-        </div>
-      }
-
-      <!-- Step 2: Livestock -->
-      @if (currentStep() === 2) {
-        <div class="step-content page-enter">
-          <p class="step-hint">Select the livestock you keep (if any), or type your own:</p>
-          <div class="custom-entry">
-            <input class="input-field" type="text" [(ngModel)]="customLivestockInput" placeholder="Type a livestock type, e.g. Turkey" (keydown.enter)="$event.preventDefault(); addCustomLivestock()" />
-            <button type="button" class="btn btn-outline btn-sm" (click)="addCustomLivestock()">Add</button>
-          </div>
-          <div class="livestock-grid">
-            @for (animal of livestockOptions; track animal.name) {
-              <button type="button" class="crop-btn" [class.selected]="isLivestockSelected(animal.name)" (click)="toggleLivestock(animal.name)">
-                <mat-icon>{{ animal.icon }}</mat-icon>
-                <span>{{ animal.name }}</span>
-                @if (isLivestockSelected(animal.name)) {
-                  <mat-icon class="check-icon">check_circle</mat-icon>
-                }
-              </button>
-            }
-          </div>
-          <button type="button" class="btn btn-ghost" style="margin-top:16px" (click)="nextStep()">
-            <mat-icon>skip_next</mat-icon> I don't keep livestock
-          </button>
-        </div>
-      }
-
-      <!-- Step 3: Water & Soil -->
-      @if (currentStep() === 3) {
-        <div class="step-content page-enter">
-          <div class="field-group">
-            <label>Primary Water Source *</label>
-            <div class="water-options">
-              @for (w of waterSources; track w.value) {
-                <button type="button" class="option-btn" [class.selected]="farm.waterSource === w.value" (click)="farm.waterSource = w.value">
-                  <mat-icon>{{ w.icon }}</mat-icon>
-                  <span>{{ w.label }}</span>
-                </button>
-              }
-            </div>
-          </div>
-          <div class="field-group" style="margin-top:16px">
-            <label>Soil Type</label>
-            <select class="input-field" [(ngModel)]="farm.soilType">
-              @for (s of soilTypes; track s) {
-                <option [value]="s">{{ s }}</option>
-              }
-            </select>
-          </div>
-        </div>
-      }
-
-      <!-- Step 4: Preferences -->
-      @if (currentStep() === 4) {
-        <div class="step-content page-enter">
-          <div class="field-group">
-            <label>Preferred Language</label>
-            <div class="lang-options">
-              @for (l of languages; track l.code) {
-                <button type="button" class="option-btn" [class.selected]="farm.language === l.code" (click)="farm.language = l.code">
-                  <span class="lang-flag">{{ l.flag }}</span>
-                  <span>{{ l.name }}</span>
-                </button>
-              }
-            </div>
-          </div>
-          <div class="field-group" style="margin-top:20px">
-            <label>Farming Experience</label>
-            <div class="exp-options">
-              @for (e of experiences; track e.value) {
-                <button type="button" class="option-btn" [class.selected]="farm.experience === e.value" (click)="farm.experience = e.value" style="flex-direction:column;gap:4px;align-items:flex-start;padding:14px 16px">
-                  <strong style="font-size:14px">{{ e.label }}</strong>
-                  <span style="font-size:12px;color:var(--text-muted)">{{ e.desc }}</span>
-                </button>
-              }
-            </div>
-          </div>
-          <div class="field-group" style="margin-top:16px">
-            <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
-              <input type="checkbox" [(ngModel)]="farm.hasInternet" style="width:16px;height:16px" />
-              <span>I have reliable internet connectivity in my area</span>
-            </label>
           </div>
         </div>
       }

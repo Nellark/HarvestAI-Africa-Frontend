@@ -1,14 +1,10 @@
-import { Injectable, inject, Optional } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ToastService } from './toast.service';
 
 @Injectable({ providedIn: 'root' })
 export class PWAService {
   private readonly toastService = inject(ToastService);
-  private swUpdate: any = null;
-
-  constructor(@Optional() swUpdate: any) {
-    this.swUpdate = swUpdate;
-  }
+  private swUpdate: { isEnabled?: boolean; activateUpdate?: () => Promise<boolean>; checkForUpdate?: () => Promise<boolean> } | null = null;
 
   checkForUpdates(): void {
     if (!this.swUpdate || !this.swUpdate.isEnabled) {

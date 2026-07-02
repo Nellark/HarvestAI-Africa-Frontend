@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
       <div class="empty-icon">{{ icon }}</div>
       <h3 class="empty-title">{{ title }}</h3>
       <p class="empty-description">{{ description }}</p>
-      <button *ngIf="actionLabel" class="empty-action" (click)="onAction.emit())">
+      <button *ngIf="actionLabel" class="empty-action" (click)="action.emit()">
         {{ actionLabel }}
       </button>
     </div>

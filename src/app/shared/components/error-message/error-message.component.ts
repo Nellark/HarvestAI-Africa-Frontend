@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
       <div class="error-content">
         <h4 *ngIf="title" class="error-title">{{ title }}</h4>
         <p class="error-text">{{ message }}</p>
-        <button *ngIf="showRetry" class="error-retry" (click)="onRetry.emit())">
+        <button *ngIf="showRetry" class="error-retry" (click)="retry.emit()">
           Retry
         </button>
       </div>

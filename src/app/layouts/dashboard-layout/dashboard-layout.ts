@@ -36,7 +36,6 @@ export class DashboardLayoutComponent {
   ];
 
   aiNav: NavItem[] = [
-    { path: 'ai-assistant', label: 'AI Assistant', icon: 'psychology' },
     { path: 'disease-detection', label: 'Disease Detection', icon: 'biotech' },
     { path: 'crop-advisor', label: 'Crop Advisor', icon: 'tips_and_updates' },
     { path: 'yield-forecast', label: 'Yield Forecast', icon: 'trending_up' },
@@ -57,7 +56,7 @@ export class DashboardLayoutComponent {
   bottomNavItems: NavItem[] = [
     { path: 'dashboard', label: 'Home', icon: 'home' },
     { path: 'farm', label: 'Farm', icon: 'yard' },
-    { path: 'ai-assistant', label: 'AI', icon: 'psychology' },
+    { path: 'disease-detection', label: 'Scan', icon: 'biotech' },
     { path: 'market-prices', label: 'Market', icon: 'price_check' },
     { path: 'settings', label: 'Settings', icon: 'settings' },
   ];

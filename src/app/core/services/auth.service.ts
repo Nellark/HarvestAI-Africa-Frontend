@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import type { User } from '../models/app.models';
+import type { User } from '../../shared/models/app.models';
 import { AppStateService } from './app-state.service';
 import { ApiService } from './api.service';
+import { MOCK_FARM, MOCK_WEATHER, MOCK_PRICES, MOCK_NOTIFICATIONS, MOCK_TASKS } from '../../mock-data/mock-data';
 
 interface AuthResponse {
   accessToken: string;
@@ -13,6 +14,19 @@ interface AuthResponse {
 export class AuthService {
   private readonly state = inject(AppStateService);
   private readonly api = inject(ApiService);
+
+  initializeSession(): void {
+    this.state.initialize();
+
+    // Seed demo data for the UI foundation, without overwriting a saved farm
+    if (!this.state.getFarm()) {
+      this.state.setFarm(MOCK_FARM);
+    }
+    this.state.setWeather(MOCK_WEATHER);
+    this.state.setPrices(MOCK_PRICES);
+    this.state.setNotifications(MOCK_NOTIFICATIONS);
+    this.state.setTasks(MOCK_TASKS);
+  }
 
   async register(userInput: {
     name: string;

@@ -20,7 +20,6 @@ export class OnboardingComponent implements OnInit {
 
   currentStep = signal(0);
   customCropInput = '';
-  customLivestockInput = '';
 
   personalDetails = {
     fullName: '',
@@ -48,9 +47,6 @@ export class OnboardingComponent implements OnInit {
   steps = [
     { step: 1, title: 'Farm Basics', description: 'Tell us about your farm location and size' },
     { step: 2, title: 'Crops', description: 'What do you grow on your farm?' },
-    { step: 3, title: 'Livestock', description: 'Do you keep any animals?' },
-    { step: 4, title: 'Water & Soil', description: 'Your farm environment details' },
-    { step: 5, title: 'Preferences', description: 'Language and experience level' },
   ];
 
   progressPct = computed(() => Math.round((this.currentStep() / (this.steps.length - 1)) * 100));
@@ -70,40 +66,6 @@ export class OnboardingComponent implements OnInit {
     { name: 'Sunflower', icon: 'wb_sunny' },
   ];
 
-  livestockOptions = [
-    { name: 'Cattle', icon: 'set_meal' },
-    { name: 'Goats', icon: 'pets' },
-    { name: 'Sheep', icon: 'cruelty_free' },
-    { name: 'Chickens', icon: 'egg_alt' },
-    { name: 'Pigs', icon: 'restaurant' },
-    { name: 'Ducks', icon: 'water_bird' },
-  ];
-
-  waterSources = [
-    { value: 'borehole', label: 'Borehole', icon: 'water_pump' },
-    { value: 'river', label: 'River / Dam', icon: 'water' },
-    { value: 'rainwater', label: 'Rainwater Harvesting', icon: 'water_drop' },
-    { value: 'scheme', label: 'Irrigation Scheme', icon: 'sprinkler' },
-    { value: 'tap', label: 'Municipal Water', icon: 'local_drink' },
-  ];
-
-  soilTypes = ['Sandy Loam', 'Clay', 'Loam', 'Sandy', 'Silty Loam', 'Clay Loam', 'Unknown'];
-
-  languages = [
-    { code: 'en', name: 'English', flag: '🇿🇦' },
-    { code: 'sw', name: 'Swahili', flag: '🇰🇪' },
-    { code: 'fr', name: 'Français', flag: '🇫🇷' },
-    { code: 'pt', name: 'Português', flag: '🇲🇿' },
-    { code: 'zu', name: 'isiZulu', flag: '🇿🇦' },
-    { code: 'ar', name: 'العربية', flag: '🇪🇬' },
-  ];
-
-  experiences = [
-    { value: 'beginner', label: 'Beginner', desc: 'Less than 3 years farming experience' },
-    { value: 'intermediate', label: 'Intermediate', desc: '3–10 years of farming experience' },
-    { value: 'experienced', label: 'Experienced', desc: 'More than 10 years farming' },
-  ];
-
   ngOnInit() {
     this.prefillFromUser();
   }
@@ -112,23 +74,11 @@ export class OnboardingComponent implements OnInit {
     return this.farm.crops.includes(name);
   }
 
-  isLivestockSelected(name: string) {
-    return this.farm.livestock.includes(name);
-  }
-
   toggleCrop(name: string) {
     if (this.isCropSelected(name)) {
       this.farm.crops = this.farm.crops.filter((c) => c !== name);
     } else {
       this.farm.crops = [...this.farm.crops, name];
-    }
-  }
-
-  toggleLivestock(name: string) {
-    if (this.isLivestockSelected(name)) {
-      this.farm.livestock = this.farm.livestock.filter((l) => l !== name);
-    } else {
-      this.farm.livestock = [...this.farm.livestock, name];
     }
   }
 
@@ -141,17 +91,6 @@ export class OnboardingComponent implements OnInit {
       this.farm.crops = [...this.farm.crops, normalized];
     }
     this.customCropInput = '';
-  }
-
-  addCustomLivestock() {
-    const value = this.customLivestockInput.trim();
-    if (!value) return;
-
-    const normalized = value.replace(/\s+/g, ' ');
-    if (!this.farm.livestock.includes(normalized)) {
-      this.farm.livestock = [...this.farm.livestock, normalized];
-    }
-    this.customLivestockInput = '';
   }
 
   nextStep() {
