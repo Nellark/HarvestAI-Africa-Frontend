@@ -4,7 +4,7 @@
           <h1 class="page-title">Notifications</h1>
           <p class="page-subtitle">{{ state.unreadNotifications() }} unread notifications</p>
         </div>
-        <button class="btn btn-outline" (click)="state.markAllNotificationsRead()">
+        <button class="btn btn-outline" (click)="markAllRead()">
           <mat-icon>done_all</mat-icon> Mark All Read
         </button>
       </div>
@@ -23,7 +23,7 @@
 
       <div class="notif-list">
         @for (n of filteredNotifications(); track n.id) {
-          <div class="notif-card card" [class.unread]="!n.read" (click)="state.markNotificationRead(n.id)">
+          <div class="notif-card card" [class.unread]="!n.read" (click)="markRead(n.id)">
             <div class="notif-icon-wrap icon-wrap {{ iconClass(n.type) }}" style="width:46px;height:46px;font-size:22px;border-radius:12px;flex-shrink:0">
               <mat-icon>{{ n.icon }}</mat-icon>
             </div>

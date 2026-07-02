@@ -41,12 +41,12 @@ export class LoginComponent {
 
   togglePwd() { this.showPwd.set(!this.showPwd()); }
 
-  onLogin() {
+  async onLogin() {
     this.loading.set(true);
     this.error.set('');
 
     try {
-      this.auth.login(this.email, this.password);
+      await this.auth.login(this.email, this.password);
       this.router.navigateByUrl('/app/dashboard');
     } catch (err) {
       this.error.set(err instanceof Error ? err.message : 'Unable to sign in.');

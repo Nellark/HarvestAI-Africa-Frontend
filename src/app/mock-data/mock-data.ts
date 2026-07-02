@@ -2,8 +2,8 @@ import type { User, Farm, WeatherData, CropPrice, Notification, PlannerTask, AIM
 
 export const MOCK_USER: User = {
   id: '1',
-  name: 'Thabo Nkosi',
-  email: 'thabo.nkosi@example.com',
+  name: 'Yonela Kulati',
+  email: 'yonela.kulati@example.com',
   phone: '+27 82 456 7890',
   avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face',
   role: 'farmer',
@@ -15,7 +15,7 @@ export const MOCK_USER: User = {
 
 export const MOCK_FARM: Farm = {
   id: '1',
-  name: 'Nkosi Family Farm',
+  name: 'Ngoakoana Mphago Farm',
   size: 12.5,
   sizeUnit: 'ha',
   province: 'Limpopo',
@@ -92,7 +92,7 @@ export const MOCK_AI_MESSAGES: AIMessage[] = [
   {
     id: '1',
     role: 'assistant',
-    content: 'Hello Thabo! I am your HarvestAI assistant. I can help you with crop management, disease detection, weather advice, market insights, and much more. How can I help you today?',
+    content: 'Hello Yonela! I am your HarvestAI assistant. I can help you with crop management, disease detection, weather advice, market insights, and much more. How can I help you today?',
     timestamp: new Date(Date.now() - 300000),
   },
   {
@@ -169,7 +169,7 @@ export const MOCK_DISEASE_DETECTIONS: DiseaseDetection[] = [
 
 export const MOCK_MARKETPLACE_LISTINGS: MarketplaceListing[] = [
   { id: '1', title: 'Premium Maize Seed – PAN 6Q-508', description: '50kg bag of high-yield maize seed. Suitable for dryland conditions in southern Africa.', price: 1250, currency: 'ZAR', unit: '50kg bag', category: 'inputs', seller: 'AgriSeed SA', location: 'Polokwane, Limpopo', image: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?w=300&h=200&fit=crop', rating: 4.8, reviews: 124, stock: 230, verified: true },
-  { id: '2', title: 'Fresh Tomatoes – Roma Variety', description: 'Grade A Roma tomatoes, freshly harvested. Suitable for wholesale and retail buyers.', price: 7.50, currency: 'ZAR', unit: 'kg', category: 'produce', seller: 'Nkosi Family Farm', location: 'Polokwane, Limpopo', image: 'https://images.unsplash.com/photo-1607305387299-a3d9611cd469?w=300&h=200&fit=crop', rating: 4.6, reviews: 48, stock: 500, verified: true },
+  { id: '2', title: 'Fresh Tomatoes – Roma Variety', description: 'Grade A Roma tomatoes, freshly harvested. Suitable for wholesale and retail buyers.', price: 7.50, currency: 'ZAR', unit: 'kg', category: 'produce', seller: 'Ngoakoana Mphago Farm', location: 'Polokwane, Limpopo', image: 'https://images.unsplash.com/photo-1607305387299-a3d9611cd469?w=300&h=200&fit=crop', rating: 4.6, reviews: 48, stock: 500, verified: true },
   { id: '3', title: 'Irrigation Drip Kit – 1 ha', description: 'Complete drip irrigation system for 1 hectare. Includes mainline, drippers, filters, and fittings.', price: 4800, currency: 'ZAR', unit: 'kit', category: 'equipment', seller: 'IrriTech SA', location: 'Johannesburg, Gauteng', image: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=300&h=200&fit=crop', rating: 4.9, reviews: 212, stock: 45, verified: true },
   { id: '4', title: 'Organic Fertilizer – Chicken Manure', description: 'Well-composted chicken manure. Rich in NPK. Perfect for vegetable gardens.', price: 280, currency: 'ZAR', unit: '25kg bag', category: 'inputs', seller: 'GreenGrow Organics', location: 'Tzaneen, Limpopo', image: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=300&h=200&fit=crop', rating: 4.4, reviews: 89, stock: 600, verified: false },
   { id: '5', title: 'Fresh Spinach – Hybrid F1', description: 'Crispy, fresh spinach. Perfect for local supermarkets and restaurants.', price: 11.00, currency: 'ZAR', unit: 'kg', category: 'produce', seller: 'GreenLeaf Farms', location: 'Tzaneen, Limpopo', image: 'https://images.unsplash.com/photo-1576045057995-568f588f82fb?w=300&h=200&fit=crop', rating: 4.7, reviews: 35, stock: 200, verified: true },

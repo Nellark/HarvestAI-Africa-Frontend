@@ -1,0 +1,185 @@
+<!-- Offline Banner -->
+@if (state.isOffline()) {
+  <div class="offline-banner">
+    <mat-icon>wifi_off</mat-icon>
+    You are offline — showing cached data
+    <button class="btn btn-sm btn-outline" style="color:#fff;border-color:rgba(255,255,255,0.5);margin-left:12px">
+      <mat-icon style="font-size:14px;width:14px;height:14px">sync</mat-icon> Sync
+    </button>
+  </div>
+}
+
+<div class="shell-layout" [class.sidebar-collapsed]="!state.sidebarOpen()">
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.open]="state.sidebarOpen()">
+    <div class="sidebar-header">
+      <div class="logo" routerLink="/app/dashboard">
+        <div class="logo-icon">
+          <mat-icon>agriculture</mat-icon>
+        </div>
+        <div class="logo-text">
+          <span class="logo-name">HarvestAI</span>
+          <span class="logo-sub">Africa</span>
+        </div>
+      </div>
+      <button class="sidebar-toggle hide-desktop" (click)="state.toggleSidebar()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section">
+        <span class="nav-section-label">Main</span>
+        @for (item of mainNav; track item.path) {
+          <a class="nav-item"
+             [routerLink]="'/app/' + item.path"
+             routerLinkActive="active"
+             [matTooltip]="!state.sidebarOpen() ? item.label : ''"
+             matTooltipPosition="right"
+             (click)="onNavClick()">
+            <mat-icon>{{ item.icon }}</mat-icon>
+            <span class="nav-label">{{ item.label }}</span>
+            @if (item.badge) {
+              <span class="nav-badge">{{ item.badge }}</span>
+            }
+          </a>
+        }
+      </div>
+
+      <div class="nav-section">
+        <span class="nav-section-label">AI Tools</span>
+        @for (item of aiNav; track item.path) {
+          <a class="nav-item"
+             [routerLink]="'/app/' + item.path"
+             routerLinkActive="active"
+             [matTooltip]="!state.sidebarOpen() ? item.label : ''"
+             matTooltipPosition="right"
+             (click)="onNavClick()">
+            <mat-icon>{{ item.icon }}</mat-icon>
+            <span class="nav-label">{{ item.label }}</span>
+          </a>
+        }
+      </div>
+
+      <div class="nav-section">
+        <span class="nav-section-label">Commerce</span>
+        @for (item of commerceNav; track item.path) {
+          <a class="nav-item"
+             [routerLink]="'/app/' + item.path"
+             routerLinkActive="active"
+             [matTooltip]="!state.sidebarOpen() ? item.label : ''"
+             matTooltipPosition="right"
+             (click)="onNavClick()">
+            <mat-icon>{{ item.icon }}</mat-icon>
+            <span class="nav-label">{{ item.label }}</span>
+          </a>
+        }
+      </div>
+
+      <div class="nav-section">
+        <span class="nav-section-label">Other</span>
+        @for (item of otherNav; track item.path) {
+          <a class="nav-item"
+             [routerLink]="'/app/' + item.path"
+             routerLinkActive="active"
+             [matTooltip]="!state.sidebarOpen() ? item.label : ''"
+             matTooltipPosition="right"
+             (click)="onNavClick()">
+            <mat-icon>{{ item.icon }}</mat-icon>
+            <span class="nav-label">{{ item.label }}</span>
+            @if (item.path === 'notifications' && state.unreadNotifications() > 0) {
+              <span class="nav-badge">{{ state.unreadNotifications() }}</span>
+            }
+          </a>
+        }
+      </div>
+    </nav>
+
+    <!-- Sidebar Footer -->
+    <div class="sidebar-footer">
+      <div class="sidebar-user" [matMenuTriggerFor]="userMenu">
+        <div class="avatar">
+          @if (state.user()?.avatar) {
+            <img [src]="state.user()!.avatar" [alt]="state.user()!.name" />
+          } @else {
+            {{ state.user()?.name?.charAt(0) }}
+          }
+        </div>
+        <div class="user-info">
+          <span class="user-name">{{ state.user()?.name }}</span>
+          <span class="user-role">{{ state.user()?.province }}, {{ state.user()?.country }}</span>
+        </div>
+        <mat-icon class="user-chevron">expand_more</mat-icon>
+      </div>
+      <mat-menu #userMenu="matMenu" xPosition="after" yPosition="above">
+        <a mat-menu-item routerLink="/app/settings"><mat-icon>settings</mat-icon> Settings</a>
+        <button mat-menu-item (click)="state.toggleDarkMode()"><mat-icon>{{ state.isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon> {{ state.isDarkMode() ? 'Light Mode' : 'Dark Mode' }}</button>
+        <mat-divider></mat-divider>
+        <a mat-menu-item routerLink="/auth/login"><mat-icon>logout</mat-icon> Sign Out</a>
+      </mat-menu>
+    </div>
+  </aside>
+
+  <!-- Sidebar Overlay (Mobile) -->
+  @if (state.sidebarOpen() && isMobile()) {
+    <div class="sidebar-overlay" (click)="state.toggleSidebar()"></div>
+  }
+
+  <!-- Main Content Area -->
+  <div class="main-area">
+    <!-- Topbar -->
+    <header class="topbar">
+      <button class="topbar-toggle" (click)="state.toggleSidebar()">
+        <mat-icon>{{ state.sidebarOpen() ? 'menu_open' : 'menu' }}</mat-icon>
+      </button>
+
+      <div class="topbar-search hide-mobile">
+        <mat-icon>search</mat-icon>
+        <input type="text" placeholder="Search crops, AI advice, market prices..." />
+      </div>
+
+      <div class="topbar-actions">
+        <button class="action-btn hide-mobile" (click)="state.toggleDarkMode()" [matTooltip]="state.isDarkMode() ? 'Light Mode' : 'Dark Mode'">
+          <mat-icon>{{ state.isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+        </button>
+        <button class="action-btn" (click)="notifOpen.set(!notifOpen())" [matTooltip]="'Notifications'">
+          <mat-icon [matBadge]="state.unreadNotifications() || null" matBadgeColor="warn" matBadgeSize="small">notifications</mat-icon>
+        </button>
+        <button class="action-btn" routerLink="/app/ai-assistant" [matTooltip]="'AI Assistant'">
+          <mat-icon>psychology</mat-icon>
+        </button>
+        <div class="topbar-avatar" [matMenuTriggerFor]="topUserMenu">
+          <div class="avatar" style="width:36px;height:36px;font-size:13px;cursor:pointer">
+            @if (state.user()?.avatar) {
+              <img [src]="state.user()!.avatar" [alt]="state.user()!.name" />
+            } @else {
+              {{ state.user()?.name?.charAt(0) }}
+            }
+          </div>
+        </div>
+        <mat-menu #topUserMenu="matMenu">
+          <a mat-menu-item routerLink="/app/settings"><mat-icon>settings</mat-icon> Settings</a>
+          <a mat-menu-item routerLink="/auth/login"><mat-icon>logout</mat-icon> Sign Out</a>
+        </mat-menu>
+      </div>
+    </header>
+
+    <!-- Page Content -->
+    <main class="content-area page-enter">
+      <router-outlet />
+    </main>
+
+    <!-- Bottom Nav (Mobile) -->
+    <nav class="bottom-nav hide-desktop">
+      @for (item of bottomNavItems; track item.path) {
+        <a class="bottom-nav-item" [routerLink]="'/app/' + item.path" routerLinkActive="active">
+          <mat-icon>{{ item.icon }}</mat-icon>
+          <span>{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+  </div>
+</div>
+
+<!-- Notification Drawer -->
+<app-notification-drawer [open]="notifOpen()" (closed)="notifOpen.set(false)" />

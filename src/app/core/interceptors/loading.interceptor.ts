@@ -1,13 +1,21 @@
 import { HttpInterceptorFn } from '@angular/common/http';
-import { finalize } from 'rxjs/operators';
-
-let activeRequests = 0;
+import { inject } from '@angular/core';
+import { finalize } from 'rxjs';
+import { LoadingService } from '../services/loading.service';
 
 export const loadingInterceptor: HttpInterceptorFn = (req, next) => {
-  activeRequests++;
+  const loadingService = inject(LoadingService);
+
+  // Skip loading for certain requests
+  if (req.headers.get('skip-loading') === 'true') {
+    return next(req);
+  }
+
+  loadingService.show();
+
   return next(req).pipe(
     finalize(() => {
-      activeRequests--;
+      loadingService.hide();
     }),
   );
 };

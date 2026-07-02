@@ -1,8 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { AppStateService } from '../../core/services/app-state.service';
+import { ToastService } from '../../core/services/toast.service';
+import type { User } from '../../shared/models/app.models';
 
 @Component({
   selector: 'app-settings',
@@ -11,10 +13,20 @@ import { AppStateService } from '../../core/services/app-state.service';
   templateUrl: './settings.html',
   styleUrls: ['./settings.scss'],
 })
-export class SettingsComponent {
+export class SettingsComponent implements OnInit {
   state = inject(AppStateService);
+  private readonly toast = inject(ToastService);
   activeSection = signal('profile');
   currentLang = 'en';
+  profileForm = {
+    name: '',
+    email: '',
+    phone: '',
+    country: 'South Africa',
+    province: '',
+    role: 'Farmer',
+    avatar: '',
+  };
 
   sections = [
     { id: 'profile', label: 'Profile', icon: 'person' },
@@ -62,4 +74,58 @@ export class SettingsComponent {
     { icon: 'star_rate', label: 'Rate HarvestAI' },
     { icon: 'share', label: 'Share with Friends' },
   ];
+
+  ngOnInit() {
+    this.syncProfileForm();
+  }
+
+  syncProfileForm() {
+    const user = this.state.user();
+    this.profileForm = {
+      name: user?.name ?? '',
+      email: user?.email ?? '',
+      phone: user?.phone ?? '',
+      country: user?.country ?? '',
+      province: user?.province ?? '',
+      role: user?.role === 'admin' ? 'Admin' : user?.role === 'expert' ? 'Agronomist' : 'Farmer',
+      avatar: user?.avatar ?? '',
+    };
+    this.currentLang = this.state.language();
+  }
+
+  onAvatarSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      this.profileForm.avatar = result;
+      this.state.setUserAvatar(result);
+    };
+    reader.readAsDataURL(file);
+  }
+
+  saveProfile() {
+    this.state.updateProfile({
+      name: this.profileForm.name,
+      email: this.profileForm.email,
+      phone: this.profileForm.phone,
+      country: this.profileForm.country,
+      province: this.profileForm.province,
+      role: this.toUserRole(this.profileForm.role),
+      avatar: this.profileForm.avatar || undefined,
+    });
+    this.state.setLanguage(this.currentLang);
+    this.toast.success('Profile updated successfully.');
+  }
+
+  private toUserRole(role: string): User['role'] {
+    if (role === 'Admin') return 'admin';
+    if (role === 'Agronomist') return 'expert';
+    return 'farmer';
+  }
 }

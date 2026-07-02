@@ -1,0 +1,141 @@
+<div class="auth-shell">
+  <div class="auth-visual">
+    <div class="brand-row">
+      <div class="brand-mark">HA</div>
+      <div>
+        <strong>HarvestAI Africa</strong>
+        <span>Trusted intelligence for modern African agriculture</span>
+      </div>
+    </div>
+
+    <div class="visual-card">
+      <p class="eyebrow">Platform preview</p>
+      <h1>Real-time advice, offline resilience, and a premium farmer experience.</h1>
+      <ul>
+        <li><mat-icon>shield</mat-icon> Secure account access and OTP verification</li>
+        <li><mat-icon>translate</mat-icon> Language selection for multilingual teams</li>
+        <li><mat-icon>dark_mode</mat-icon> Dark mode and high-contrast UI options</li>
+      </ul>
+      <img
+        src="https://images.unsplash.com/photo-1595273670150-bd0c3c9f01be?auto=format&fit=crop&w=1000&q=80"
+        alt="African farmer using a tablet"
+      />
+    </div>
+  </div>
+
+  <mat-card class="auth-card">
+    <div class="auth-card-header">
+      <div>
+        <p class="eyebrow">{{ modeLabel() }}</p>
+        <h2>{{ title() }}</h2>
+        <p>{{ subtitle() }}</p>
+      </div>
+      <button mat-icon-button (click)="state.toggleTheme()" aria-label="Toggle theme">
+        <mat-icon>{{ state.isDarkMode() ? 'dark_mode' : 'light_mode' }}</mat-icon>
+      </button>
+    </div>
+
+    @if (mode() === 'language') {
+      <div class="language-grid">
+        @for (option of languages; track option.value) {
+          <button class="language-card" [class.active]="option.value === state.language()" (click)="state.setLanguage(option.value)">
+            <mat-icon>language</mat-icon>
+            <strong>{{ option.label }}</strong>
+            <span>{{ option.value.toUpperCase() }}</span>
+          </button>
+        }
+      </div>
+    } @else {
+      <form class="auth-form" (ngSubmit)="submit()">
+        @if (mode() === 'register') {
+          <mat-form-field appearance="outline">
+            <mat-label>Full name</mat-label>
+            <input matInput [(ngModel)]="fullName" name="fullName" placeholder="Farmer or team lead" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Farm / company name</mat-label>
+            <input matInput [(ngModel)]="farmName" name="farmName" placeholder="Harvest Fields Cooperative" />
+          </mat-form-field>
+        }
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email or phone</mat-label>
+          <input matInput [(ngModel)]="email" name="email" placeholder="name@farm.co.za" />
+        </mat-form-field>
+
+        @if (mode() !== 'otp') {
+          <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" [(ngModel)]="password" name="password" placeholder="••••••••" />
+          </mat-form-field>
+        }
+
+        @if (mode() === 'forgot') {
+          <p class="helper">
+            We will send a reset link and an SMS fallback so farm teams can regain access quickly.
+          </p>
+        }
+
+        @if (mode() === 'otp') {
+          <div class="otp-grid">
+            @for (cell of otpCells; track cell) {
+              <input maxlength="1" inputmode="numeric" placeholder="0" aria-label="OTP digit" />
+            }
+          </div>
+        }
+
+        @if (mode() === 'register') {
+          <div class="meta-grid">
+            <mat-form-field appearance="outline">
+              <mat-label>Country</mat-label>
+              <mat-select [(ngModel)]="country" name="country">
+                <mat-option value="South Africa">South Africa</mat-option>
+                <mat-option value="Kenya">Kenya</mat-option>
+                <mat-option value="Nigeria">Nigeria</mat-option>
+                <mat-option value="Ghana">Ghana</mat-option>
+                <mat-option value="Zambia">Zambia</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Preferred language</mat-label>
+              <mat-select [value]="state.language()" (valueChange)="state.setLanguage($event)">
+                @for (option of languages; track option.value) {
+                  <mat-option [value]="option.value">{{ option.label }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        }
+
+        <div class="row">
+          <mat-checkbox>{{ mode() === 'register' ? 'Accept terms' : 'Remember me' }}</mat-checkbox>
+          <a
+            class="row-link"
+            [routerLink]="mode() === 'login' ? '/auth/forgot-password' : '/auth/login'"
+          >
+            {{ mode() === 'login' ? 'Forgot password?' : 'Return to login' }}
+          </a>
+        </div>
+
+        @if (errorMessage) {
+          <div class="status-message">{{ errorMessage }}</div>
+        }
+
+        <button mat-flat-button color="primary" class="submit-btn" type="submit">
+          <mat-icon>{{ submitIcon() }}</mat-icon>
+          {{ submitLabel() }}
+        </button>
+      </form>
+    }
+
+    <mat-divider />
+
+    <div class="auth-footer">
+      <span>{{ footerText() }}</span>
+      <a mat-stroked-button routerLink="/">
+        <mat-icon>arrow_back</mat-icon>
+        Back to landing
+      </a>
+    </div>
+  </mat-card>
+</div>

@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { AppStateService } from '../../core/services/app-state.service';
+import { ToastService } from '../../core/services/toast.service';
 
 @Component({
   selector: 'app-notifications',
@@ -12,6 +13,7 @@ import { AppStateService } from '../../core/services/app-state.service';
 })
 export class NotificationsComponent {
   state = inject(AppStateService);
+  private readonly toast = inject(ToastService);
   activeTab = 'all';
 
   tabs = [
@@ -49,5 +51,15 @@ export class NotificationsComponent {
     if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
     if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
     return `${Math.floor(seconds / 86400)}d ago`;
+  }
+
+  markRead(id: string) {
+    this.state.markNotificationRead(id);
+    this.toast.info('Notification marked as read.');
+  }
+
+  markAllRead() {
+    this.state.markAllNotificationsRead();
+    this.toast.success('All notifications marked as read.');
   }
 }

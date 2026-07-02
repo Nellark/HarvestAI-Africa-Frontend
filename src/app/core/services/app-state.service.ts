@@ -1,32 +1,152 @@
 import { Injectable, signal, computed } from '@angular/core';
-import type { User, Farm, WeatherData, CropPrice, Notification, PlannerTask } from '../../shared/models/app.models';
-import { MOCK_USER, MOCK_FARM, MOCK_WEATHER, MOCK_PRICES, MOCK_NOTIFICATIONS, MOCK_TASKS } from '../../mock-data/mock-data';
+import type { User, Farm, WeatherData, Notification, Task, MarketData, AnalyticsData, CommunityData } from '../models/app.models';
+
+interface OnboardingPayload {
+  name: string;
+  fullName?: string;
+  email?: string;
+  phone?: string;
+  size: number;
+  province: string;
+  country: string;
+  crops: string[];
+  soilType: string;
+  irrigationType: string;
+  language: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class AppStateService {
-  readonly user = signal<User | null>(MOCK_USER);
-  readonly farm = signal<Farm | null>(MOCK_FARM);
-  readonly weather = signal<WeatherData | null>(MOCK_WEATHER);
-  readonly prices = signal<CropPrice[]>(MOCK_PRICES);
-  readonly notifications = signal<Notification[]>(MOCK_NOTIFICATIONS);
-  readonly tasks = signal<PlannerTask[]>(MOCK_TASKS);
+  private readonly guestUser: User = {
+    id: 'guest',
+    name: 'Guest Farmer',
+    email: 'guest@harvestai.africa',
+    phone: '',
+    role: 'farmer',
+    country: '',
+    province: '',
+    language: 'en',
+    onboardingComplete: false,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  // User session
+  readonly user = signal<User | null>(null);
+  readonly isAuthenticated = computed(() => this.user() !== null);
+
+  // Farm data
+  readonly farm = signal<Farm | null>(null);
+
+  // Cached data
+  readonly weather = signal<WeatherData | null>(null);
+  readonly marketData = signal<MarketData | null>(null);
+  readonly analyticsData = signal<AnalyticsData | null>(null);
+  readonly communityData = signal<CommunityData | null>(null);
+  readonly tasks = signal<Task[]>([]);
+  readonly notifications = signal<Notification[]>([]);
+
+  // UI state
   readonly isDarkMode = signal<boolean>(false);
   readonly isOffline = signal<boolean>(false);
   readonly sidebarOpen = signal<boolean>(true);
   readonly language = signal<string>('en');
-  readonly isAuthenticated = signal<boolean>(true);
   readonly assistantOpen = signal<boolean>(false);
   readonly notificationsOpen = signal<boolean>(false);
-  readonly theme = this.isDarkMode;
-  readonly offline = this.isOffline;
 
+  // Computed values
   readonly unreadNotifications = computed(() =>
     this.notifications().filter((n) => !n.read).length
   );
 
+  readonly theme = this.isDarkMode;
+  readonly offline = this.isOffline;
+
+  // Authentication methods
+  setUser(user: User | null) {
+    this.user.set(user);
+    if (user) {
+      localStorage.setItem('harvestai-user', JSON.stringify(user));
+    } else {
+      localStorage.removeItem('harvestai-user');
+    }
+  }
+
+  getUser(): User | null {
+    return this.user();
+  }
+
+  logout() {
+    this.setUser(null);
+    this.farm.set(null);
+    this.weather.set(null);
+    this.marketData.set(null);
+    this.analyticsData.set(null);
+    this.communityData.set(null);
+    this.tasks.set([]);
+    this.notifications.set([]);
+    localStorage.removeItem('harvestai-token');
+    localStorage.removeItem('harvestai-user');
+  }
+
+  // Farm data methods
+  setFarm(farm: Farm | null) {
+    this.farm.set(farm);
+  }
+
+  getFarm(): Farm | null {
+    return this.farm();
+  }
+
+  // Cache methods
+  setWeather(data: WeatherData | null) {
+    this.weather.set(data);
+  }
+
+  setMarketData(data: MarketData | null) {
+    this.marketData.set(data);
+  }
+
+  setAnalyticsData(data: AnalyticsData | null) {
+    this.analyticsData.set(data);
+  }
+
+  setCommunityData(data: CommunityData | null) {
+    this.communityData.set(data);
+  }
+
+  setTasks(tasks: Task[]) {
+    this.tasks.set(tasks);
+  }
+
+  setNotifications(notifications: Notification[]) {
+    this.notifications.set(notifications);
+  }
+
+  addNotification(notification: Notification) {
+    this.notifications.update((ns) => [notification, ...ns]);
+  }
+
+  // Notification methods
+  markNotificationRead(id: string) {
+    this.notifications.update((ns) => ns.map((n) => (n.id === id ? { ...n, read: true } : n)));
+  }
+
+  markAllNotificationsRead() {
+    this.notifications.update((ns) => ns.map((n) => ({ ...n, read: true })));
+  }
+
+  // UI state methods
   toggleDarkMode() {
     this.isDarkMode.update((v) => !v);
     document.body.classList.toggle('dark-theme', this.isDarkMode());
+    localStorage.setItem('harvestai-theme', this.isDarkMode() ? 'dark' : 'light');
+  }
+
+  setDarkMode(enabled: boolean) {
+    this.isDarkMode.set(enabled);
+    document.body.classList.toggle('dark-theme', enabled);
+    localStorage.setItem('harvestai-theme', enabled ? 'dark' : 'light');
   }
 
   toggleSidebar() {
@@ -53,19 +173,100 @@ export class AppStateService {
     this.isOffline.update((v) => !v);
   }
 
-  toggleTheme() {
-    this.toggleDarkMode();
-  }
-
   setLanguage(language: string) {
     this.language.set(language);
+    localStorage.setItem('harvestai-language', language);
   }
 
-  markNotificationRead(id: string) {
-    this.notifications.update((ns) => ns.map((n) => (n.id === id ? { ...n, read: true } : n)));
+  // Onboarding
+  completeOnboarding(payload: OnboardingPayload) {
+    const currentUser = this.user() || this.guestUser;
+
+    this.user.set({
+      ...currentUser,
+      name: payload.fullName || currentUser.name,
+      email: payload.email || currentUser.email,
+      phone: payload.phone || currentUser.phone,
+      country: payload.country || currentUser.country,
+      province: payload.province || currentUser.province,
+      language: payload.language || currentUser.language,
+      onboardingComplete: true,
+      updatedAt: new Date().toISOString(),
+    });
+
+    this.language.set(payload.language || currentUser.language);
+
+    // Create initial farm
+    const newFarm: Farm = {
+      id: `farm-${Date.now()}`,
+      userId: currentUser.id,
+      name: payload.name || 'My Farm',
+      location: {
+        country: payload.country,
+        province: payload.province,
+        district: '',
+      },
+      size: payload.size,
+      soilType: payload.soilType,
+      irrigationType: payload.irrigationType as any,
+      fields: [],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    this.farm.set(newFarm);
   }
 
-  markAllNotificationsRead() {
-    this.notifications.update((ns) => ns.map((n) => ({ ...n, read: true })));
+  updateProfile(profile: Partial<User>) {
+    const currentUser = this.user();
+    if (!currentUser) return;
+
+    this.user.set({
+      ...currentUser,
+      ...profile,
+      updatedAt: new Date().toISOString(),
+    });
+  }
+
+  setUserAvatar(avatar: string | null) {
+    const currentUser = this.user();
+    if (!currentUser) return;
+
+    this.user.set({
+      ...currentUser,
+      avatar: avatar ?? undefined,
+      updatedAt: new Date().toISOString(),
+    });
+  }
+
+  // Initialize from localStorage
+  initialize() {
+    // Load theme
+    const savedTheme = localStorage.getItem('harvestai-theme');
+    if (savedTheme === 'dark') {
+      this.setDarkMode(true);
+    }
+
+    // Load language
+    const savedLanguage = localStorage.getItem('harvestai-language');
+    if (savedLanguage) {
+      this.setLanguage(savedLanguage);
+    }
+
+    // Load user from localStorage
+    const savedUser = localStorage.getItem('harvestai-user');
+    if (savedUser) {
+      try {
+        this.user.set(JSON.parse(savedUser));
+      } catch (e) {
+        console.error('Failed to parse saved user', e);
+      }
+    }
+
+    // Check online status
+    this.setOffline(!navigator.onLine);
+
+    window.addEventListener('online', () => this.setOffline(false));
+    window.addEventListener('offline', () => this.setOffline(true));
   }
 }

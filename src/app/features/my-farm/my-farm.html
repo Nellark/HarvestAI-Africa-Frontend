@@ -35,79 +35,94 @@
       <!-- Crops Tab -->
       @if (activeTab() === 'crops') {
         <div class="page-enter">
-          <div class="crops-grid">
-            @for (crop of state.farm()?.crops; track crop.id) {
-              <div class="crop-card card">
-                <div class="crop-card-header">
-                  <div class="icon-wrap icon-wrap-primary" style="width:48px;height:48px;font-size:24px;border-radius:12px">
-                    <mat-icon>{{ crop.icon }}</mat-icon>
+          @if (state.farm()?.crops?.length) {
+            <div class="crops-grid">
+              @for (crop of state.farm()?.crops; track crop.id) {
+                <div class="crop-card card">
+                  <div class="crop-card-header">
+                    <div class="icon-wrap icon-wrap-primary" style="width:48px;height:48px;font-size:24px;border-radius:12px">
+                      <mat-icon>{{ crop.icon }}</mat-icon>
+                    </div>
+                    <span class="badge {{ statusBadgeClass(crop.status) }}">{{ crop.status }}</span>
                   </div>
-                  <span class="badge {{ statusBadgeClass(crop.status) }}">{{ crop.status }}</span>
-                </div>
-                <h3 class="crop-card-name">{{ crop.name }}</h3>
-                <p class="crop-variety">{{ crop.variety || 'Standard variety' }}</p>
-                <div class="crop-details">
-                  <div class="crop-detail">
-                    <mat-icon>crop_square</mat-icon>
-                    <span>{{ crop.area }} {{ crop.areaUnit }}</span>
+                  <h3 class="crop-card-name">{{ crop.name }}</h3>
+                  <p class="crop-variety">{{ crop.variety || 'Standard variety' }}</p>
+                  <div class="crop-details">
+                    <div class="crop-detail">
+                      <mat-icon>crop_square</mat-icon>
+                      <span>{{ crop.area }} {{ crop.areaUnit }}</span>
+                    </div>
+                    <div class="crop-detail">
+                      <mat-icon>calendar_today</mat-icon>
+                      <span>Planted {{ crop.plantedDate }}</span>
+                    </div>
+                    <div class="crop-detail">
+                      <mat-icon>event_available</mat-icon>
+                      <span>Harvest {{ crop.expectedHarvestDate }}</span>
+                    </div>
                   </div>
-                  <div class="crop-detail">
-                    <mat-icon>calendar_today</mat-icon>
-                    <span>Planted {{ crop.plantedDate }}</span>
+                  <div class="health-row">
+                    <span class="health-label">Health Score</span>
+                    <span class="health-val" [style.color]="healthColor(crop.healthScore)">{{ crop.healthScore }}%</span>
                   </div>
-                  <div class="crop-detail">
-                    <mat-icon>event_available</mat-icon>
-                    <span>Harvest {{ crop.expectedHarvestDate }}</span>
+                  <div class="progress-bar-track">
+                    <div class="progress-bar-fill" [style.width]="crop.healthScore + '%'" [style.background]="healthColor(crop.healthScore)"></div>
+                  </div>
+                  <div class="crop-actions" style="margin-top:16px;display:flex;gap:8px">
+                    <a routerLink="/app/disease-detection" class="btn btn-sm btn-outline" style="flex:1;justify-content:center">
+                      <mat-icon>biotech</mat-icon> Scan
+                    </a>
+                    <a routerLink="/app/ai-assistant" class="btn btn-sm btn-ghost" style="flex:1;justify-content:center">
+                      <mat-icon>psychology</mat-icon> Advise
+                    </a>
                   </div>
                 </div>
-                <div class="health-row">
-                  <span class="health-label">Health Score</span>
-                  <span class="health-val" [style.color]="healthColor(crop.healthScore)">{{ crop.healthScore }}%</span>
-                </div>
-                <div class="progress-bar-track">
-                  <div class="progress-bar-fill" [style.width]="crop.healthScore + '%'" [style.background]="healthColor(crop.healthScore)"></div>
-                </div>
-                <div class="crop-actions" style="margin-top:16px;display:flex;gap:8px">
-                  <a routerLink="/app/disease-detection" class="btn btn-sm btn-outline" style="flex:1;justify-content:center">
-                    <mat-icon>biotech</mat-icon> Scan
-                  </a>
-                  <a routerLink="/app/ai-assistant" class="btn btn-sm btn-ghost" style="flex:1;justify-content:center">
-                    <mat-icon>psychology</mat-icon> Advise
-                  </a>
-                </div>
+              }
+              <div class="add-card card" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:280px;border:2px dashed var(--border);box-shadow:none">
+                <mat-icon style="font-size:36px;color:var(--text-muted);margin-bottom:8px">add_circle_outline</mat-icon>
+                <span style="font-size:14px;color:var(--text-muted);font-weight:500">Add New Crop</span>
               </div>
-            }
-            <!-- Add Crop Card -->
-            <div class="add-card card" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:280px;border:2px dashed var(--border);box-shadow:none">
-              <mat-icon style="font-size:36px;color:var(--text-muted);margin-bottom:8px">add_circle_outline</mat-icon>
-              <span style="font-size:14px;color:var(--text-muted);font-weight:500">Add New Crop</span>
             </div>
-          </div>
+          } @else {
+            <div class="card" style="padding:24px;text-align:center">
+              <mat-icon style="font-size:36px;color:var(--primary);margin-bottom:8px">grass</mat-icon>
+              <h3 style="margin:0 0 8px">No crops added yet</h3>
+              <p style="margin:0;color:var(--text-muted)">Capture your first crops during onboarding or add them later to see tailored recommendations.</p>
+            </div>
+          }
         </div>
       }
 
       <!-- Livestock Tab -->
       @if (activeTab() === 'livestock') {
         <div class="page-enter">
-          <div class="livestock-grid">
-            @for (animal of state.farm()?.livestock; track animal.id) {
-              <div class="livestock-card card">
-                <div class="livestock-icon icon-wrap icon-wrap-warning" style="width:52px;height:52px;font-size:26px;border-radius:12px;margin-bottom:12px">
-                  <mat-icon>pets</mat-icon>
+          @if (state.farm()?.livestock?.length) {
+            <div class="livestock-grid">
+              @for (animal of state.farm()?.livestock; track animal.id) {
+                <div class="livestock-card card">
+                  <div class="livestock-icon icon-wrap icon-wrap-warning" style="width:52px;height:52px;font-size:26px;border-radius:12px;margin-bottom:12px">
+                    <mat-icon>pets</mat-icon>
+                  </div>
+                  <h3>{{ animal.type }}</h3>
+                  <p style="color:var(--text-secondary);font-size:13px;margin-bottom:12px">{{ animal.breed || 'Unknown breed' }}</p>
+                  <div class="livestock-count">
+                    <span class="count-value">{{ animal.count }}</span>
+                    <span class="count-label">animals</span>
+                  </div>
+                  <div class="health-row" style="margin-top:12px">
+                    <span class="health-label">Health Status</span>
+                    <span class="badge {{ animal.healthStatus === 'good' ? 'badge-success' : animal.healthStatus === 'fair' ? 'badge-warning' : 'badge-danger' }}">{{ animal.healthStatus }}</span>
+                  </div>
                 </div>
-                <h3>{{ animal.type }}</h3>
-                <p style="color:var(--text-secondary);font-size:13px;margin-bottom:12px">{{ animal.breed || 'Unknown breed' }}</p>
-                <div class="livestock-count">
-                  <span class="count-value">{{ animal.count }}</span>
-                  <span class="count-label">animals</span>
-                </div>
-                <div class="health-row" style="margin-top:12px">
-                  <span class="health-label">Health Status</span>
-                  <span class="badge {{ animal.healthStatus === 'good' ? 'badge-success' : animal.healthStatus === 'fair' ? 'badge-warning' : 'badge-danger' }}">{{ animal.healthStatus }}</span>
-                </div>
-              </div>
-            }
-          </div>
+              }
+            </div>
+          } @else {
+            <div class="card" style="padding:24px;text-align:center">
+              <mat-icon style="font-size:36px;color:var(--primary);margin-bottom:8px">pets</mat-icon>
+              <h3 style="margin:0 0 8px">No livestock added yet</h3>
+              <p style="margin:0;color:var(--text-muted)">Add livestock during onboarding to keep health monitoring and planning in one place.</p>
+            </div>
+          }
         </div>
       }
 

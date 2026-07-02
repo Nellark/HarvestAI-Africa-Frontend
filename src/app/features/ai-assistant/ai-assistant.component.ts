@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, ViewChild, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,7 +13,9 @@ import type { AIMessage } from '../../shared/models/app.models';
   templateUrl: './ai-assistant.component.html',
   styleUrl: './ai-assistant.component.scss',
 })
-export class AiAssistantComponent {
+export class AiAssistantComponent implements AfterViewInit {
+  @ViewChild('messagesArea') private messagesAreaRef?: ElementRef<HTMLDivElement>;
+
   messages = signal<AIMessage[]>([...MOCK_AI_MESSAGES]);
   inputText = '';
   activeConv = signal('1');
@@ -44,6 +46,10 @@ export class AiAssistantComponent {
     { icon: 'wb_sunny', label: 'Weather Advice', desc: 'Farm weather tips', route: '/app/weather', iconClass: 'icon-wrap-info' },
   ];
 
+  ngAfterViewInit() {
+    this.scrollToBottom();
+  }
+
   sendSuggestion(text: string) {
     this.inputText = text;
     this.sendMessage();
@@ -57,6 +63,7 @@ export class AiAssistantComponent {
     this.messages.update(m => [...m, thinking]);
     this.inputText = '';
     this.attachments.set([]);
+    this.scrollToBottom();
     setTimeout(() => {
       this.messages.update(msgs => {
         const withoutThinking = msgs.filter(m => !m.thinking);
@@ -66,6 +73,7 @@ export class AiAssistantComponent {
           timestamp: new Date(),
         }];
       });
+      this.scrollToBottom();
     }, 1800);
   }
 
@@ -97,5 +105,14 @@ export class AiAssistantComponent {
   toggleVoice() { this.voiceActive.update(v => !v); }
   triggerImageUpload() { this.attachments.update(a => [...a, 'crop-photo.jpg']); }
   removeAttachment(att: string) { this.attachments.update(a => a.filter(x => x !== att)); }
-  newConversation() { this.messages.set([]); }
+  newConversation() { this.messages.set([]); this.scrollToBottom(); }
+
+  private scrollToBottom() {
+    requestAnimationFrame(() => {
+      const container = this.messagesAreaRef?.nativeElement;
+      if (container) {
+        container.scrollTop = container.scrollHeight;
+      }
+    });
+  }
 }

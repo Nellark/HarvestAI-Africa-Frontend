@@ -15,13 +15,22 @@
                 <div class="upload-icon"><mat-icon>camera_alt</mat-icon></div>
                 <h3>Upload crop photo</h3>
                 <p>Drag & drop or click to upload a photo of your crop.<br>Supported formats: JPG, PNG, WEBP</p>
+                <input id="disease-upload-input" type="file" accept="image/*" style="display:none" (change)="onFileSelected($event)" />
                 <div class="upload-actions">
-                  <button class="btn btn-primary" (click)="simulateUpload()">
+                  <button class="btn btn-primary" type="button" (click)="triggerFilePicker()">
                     <mat-icon>upload</mat-icon> Choose File
                   </button>
-                  <button class="btn btn-outline" (click)="simulateUpload()">
+                  <button class="btn btn-outline" type="button" (click)="triggerFilePicker()">
                     <mat-icon>photo_camera</mat-icon> Open Camera
                   </button>
+                </div>
+                <div class="field-group" style="margin-top:12px;text-align:left">
+                  <label style="display:block;margin-bottom:6px">Crop being inspected</label>
+                  <select class="input-field" [(ngModel)]="selectedCrop" name="selectedCrop">
+                    @for (c of supportedCrops; track c) {
+                      <option [value]="c">{{ c }}</option>
+                    }
+                  </select>
                 </div>
                 <div class="upload-crops">
                   <p style="font-size:12px;color:var(--text-muted);margin-bottom:8px">Supports detection for:</p>
@@ -35,12 +44,20 @@
             } @else {
               <div class="uploaded-preview">
                 <img [src]="uploadedImage()" alt="Uploaded crop" />
+                <div class="field-group" style="margin-top:12px;text-align:left">
+                  <label style="display:block;margin-bottom:6px">Crop being inspected</label>
+                  <select class="input-field" [(ngModel)]="selectedCrop" name="selectedCropPreview">
+                    @for (c of supportedCrops; track c) {
+                      <option [value]="c">{{ c }}</option>
+                    }
+                  </select>
+                </div>
                 <div class="upload-actions" style="margin-top:16px">
-                  <button class="btn btn-primary" (click)="analyze()" [disabled]="analyzing()">
+                  <button class="btn btn-primary" type="button" (click)="analyze()" [disabled]="analyzing()">
                     @if (analyzing()) { <span class="spinner"></span> Analyzing... }
                     @else { <mat-icon>biotech</mat-icon> Analyze Disease }
                   </button>
-                  <button class="btn btn-ghost" (click)="uploadedImage.set(null)"><mat-icon>refresh</mat-icon> New Photo</button>
+                  <button class="btn btn-ghost" type="button" (click)="uploadedImage.set(null)"><mat-icon>refresh</mat-icon> New Photo</button>
                 </div>
               </div>
             }

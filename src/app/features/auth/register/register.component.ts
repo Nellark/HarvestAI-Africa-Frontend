@@ -16,7 +16,7 @@ export class RegisterComponent {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
 
-  firstName = ''; lastName = ''; email = ''; phone = ''; country = 'South Africa'; password = '';
+  firstName = ''; lastName = ''; email = ''; phone = ''; country = ''; password = '';
   agree = false; loading = signal(false); showPwd = signal(false);
 
   countries = ['South Africa', 'Kenya', 'Nigeria', 'Ghana', 'Zimbabwe', 'Zambia', 'Uganda', 'Mozambique', 'Botswana', 'Tanzania', 'Malawi', 'Senegal'];
@@ -34,11 +34,11 @@ export class RegisterComponent {
   strengthColor() { return ['', '#ef4444', '#f59e0b', '#3b82f6', '#22c55e'][this.passwordStrength()]; }
   strengthLabel() { return ['', 'Weak', 'Fair', 'Good', 'Strong'][this.passwordStrength()]; }
 
-  onRegister() {
+  async onRegister() {
     this.loading.set(true);
 
     try {
-      this.auth.register({
+      await this.auth.register({
         name: `${this.firstName} ${this.lastName}`.trim(),
         email: this.email,
         password: this.password,
@@ -47,11 +47,9 @@ export class RegisterComponent {
       });
       this.router.navigateByUrl('/onboarding');
     } catch (err) {
-      this.loading.set(false);
       window.alert(err instanceof Error ? err.message : 'Unable to create account.');
-      return;
+    } finally {
+      this.loading.set(false);
     }
-
-    this.loading.set(false);
   }
 }

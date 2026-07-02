@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { FormsModule } from '@angular/forms';
 import { AppStateService } from '../../core/services/app-state.service';
+import { ToastService } from '../../core/services/toast.service';
 
 @Component({
   selector: 'app-planner',
@@ -13,6 +14,7 @@ import { AppStateService } from '../../core/services/app-state.service';
 })
 export class PlannerComponent {
   state = inject(AppStateService);
+  private readonly toast = inject(ToastService);
   showAdd = signal(false);
   statusFilter = signal('All');
   currentMonth = signal(new Date());
@@ -38,10 +40,12 @@ export class PlannerComponent {
   cycleStatus(id: string) {
     const cycle: Record<string, string> = { pending: 'in-progress', 'in-progress': 'done', done: 'pending' };
     this.state.tasks.update(ts => ts.map(t => t.id === id ? { ...t, status: cycle[t.status] as any } : t));
+    this.toast.success('Task status updated.');
   }
 
   deleteTask(id: string) {
     this.state.tasks.update(ts => ts.filter(t => t.id !== id));
+    this.toast.warning('Task removed.');
   }
 
   addTask() {
@@ -49,10 +53,12 @@ export class PlannerComponent {
     this.state.tasks.update(ts => [...ts, { ...this.newTask, id: Date.now().toString() } as any]);
     this.newTask = { title: '', category: 'other', priority: 'medium', dueDate: '' };
     this.showAdd.set(false);
+    this.toast.success('Task added successfully.');
   }
 
   addAiSuggestion(title: string) {
     this.state.tasks.update(ts => [...ts, { id: Date.now().toString(), title, category: 'other', priority: 'medium', dueDate: '2026-07-15', status: 'pending' } as any]);
+    this.toast.info('AI suggestion added to your planner.');
   }
 
   monthYear() {

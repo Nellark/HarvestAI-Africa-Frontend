@@ -23,45 +23,46 @@
               <h3 class="panel-title">Profile Information</h3>
               <div class="avatar-section">
                 <div class="avatar-large">
-                  <img [src]="state.user()?.avatar" [alt]="state.user()?.name" />
+                  <img [src]="profileForm.avatar || state.user()?.avatar" [alt]="profileForm.name || state.user()?.name" />
                 </div>
                 <div>
-                  <button class="btn btn-outline btn-sm"><mat-icon>upload</mat-icon> Change Photo</button>
-                  <p style="font-size:12px;color:var(--text-muted);margin-top:6px">JPG, PNG. Max 2MB.</p>
+                  <input #avatarInput type="file" accept="image/*" style="display:none" (change)="onAvatarSelected($event)" />
+                  <button type="button" class="btn btn-outline btn-sm" (click)="avatarInput.click()"><mat-icon>upload</mat-icon> Change Photo</button>
+                  <p style="font-size:12px;color:var(--text-muted);margin-top:6px">JPG, PNG, WEBP. Max 2MB.</p>
                 </div>
               </div>
               <div class="form-grid">
                 <div class="field-group">
                   <label>Full Name</label>
-                  <input class="input-field" [value]="state.user()?.name" />
+                  <input class="input-field" [(ngModel)]="profileForm.name" name="profileName" />
                 </div>
                 <div class="field-group">
                   <label>Email Address</label>
-                  <input class="input-field" type="email" [value]="state.user()?.email" />
+                  <input class="input-field" type="email" [(ngModel)]="profileForm.email" name="profileEmail" />
                 </div>
                 <div class="field-group">
                   <label>Phone Number</label>
-                  <input class="input-field" type="tel" [value]="state.user()?.phone || ''" />
+                  <input class="input-field" type="tel" [(ngModel)]="profileForm.phone" name="profilePhone" />
                 </div>
                 <div class="field-group">
                   <label>Country</label>
-                  <input class="input-field" [value]="state.user()?.country" />
+                  <input class="input-field" [(ngModel)]="profileForm.country" name="profileCountry" />
                 </div>
                 <div class="field-group">
                   <label>Province / Region</label>
-                  <input class="input-field" [value]="state.user()?.province" />
+                  <input class="input-field" [(ngModel)]="profileForm.province" name="profileProvince" />
                 </div>
                 <div class="field-group">
                   <label>Role</label>
-                  <select class="input-field">
+                  <select class="input-field" [(ngModel)]="profileForm.role" name="profileRole">
                     <option>Farmer</option>
                     <option>Agronomist</option>
-                    <option>Agricultural Extension Officer</option>
+                    <option>Admin</option>
                   </select>
                 </div>
               </div>
               <div style="margin-top:20px">
-                <button class="btn btn-primary"><mat-icon>save</mat-icon> Save Changes</button>
+                <button type="button" class="btn btn-primary" (click)="saveProfile()"><mat-icon>save</mat-icon> Save Changes</button>
               </div>
             </div>
           }

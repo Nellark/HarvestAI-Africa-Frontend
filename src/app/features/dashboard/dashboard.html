@@ -2,7 +2,7 @@
       <!-- Page Header -->
       <div class="page-header">
         <div>
-          <h1 class="page-title">Good {{ greeting() }}, {{ firstName() }} 👋</h1>
+          <h1 class="page-title">Good {{ greeting() }}, {{ firstName() }} </h1>
           <p class="page-subtitle">Here's what's happening on your farm today · {{ today() }}</p>
         </div>
         <div class="header-actions">
@@ -85,30 +85,36 @@
               <h3>Crop Health Overview</h3>
               <a routerLink="/app/farm" class="btn btn-ghost btn-sm">View All</a>
             </div>
-            <div class="crop-health-grid">
-              @for (crop of state.farm()?.crops; track crop.id) {
-                <div class="crop-health-card">
-                  <div class="crop-icon icon-wrap icon-wrap-primary">
-                    <mat-icon>{{ crop.icon }}</mat-icon>
-                  </div>
-                  <div class="crop-info">
-                    <span class="crop-name">{{ crop.name }}</span>
-                    <span class="crop-area">{{ crop.area }} {{ crop.areaUnit }}</span>
-                    <div class="crop-status-row">
-                      <span class="badge {{ statusBadge(crop.status) }}">{{ crop.status }}</span>
+            @if (state.farm()?.crops?.length) {
+              <div class="crop-health-grid">
+                @for (crop of state.farm()?.crops; track crop.id) {
+                  <div class="crop-health-card">
+                    <div class="crop-icon icon-wrap icon-wrap-primary">
+                      <mat-icon>{{ crop.icon }}</mat-icon>
+                    </div>
+                    <div class="crop-info">
+                      <span class="crop-name">{{ crop.name }}</span>
+                      <span class="crop-area">{{ crop.area }} {{ crop.areaUnit }}</span>
+                      <div class="crop-status-row">
+                        <span class="badge {{ statusBadge(crop.status) }}">{{ crop.status }}</span>
+                      </div>
+                    </div>
+                    <div class="crop-health-score">
+                      <div class="health-score" [style.color]="healthColor(crop.healthScore)">
+                        {{ crop.healthScore }}%
+                      </div>
+                      <div class="progress-bar-track" style="width:60px">
+                        <div class="progress-bar-fill" [style.width]="crop.healthScore + '%'" [style.background]="healthColor(crop.healthScore)"></div>
+                      </div>
                     </div>
                   </div>
-                  <div class="crop-health-score">
-                    <div class="health-score" [style.color]="healthColor(crop.healthScore)">
-                      {{ crop.healthScore }}%
-                    </div>
-                    <div class="progress-bar-track" style="width:60px">
-                      <div class="progress-bar-fill" [style.width]="crop.healthScore + '%'" [style.background]="healthColor(crop.healthScore)"></div>
-                    </div>
-                  </div>
-                </div>
-              }
-            </div>
+                }
+              </div>
+            } @else {
+              <div class="card" style="padding:16px;border:1px dashed var(--border);box-shadow:none;background:transparent">
+                <p style="margin:0;color:var(--text-muted)">Your crop health dashboard will appear here once you add crops during setup.</p>
+              </div>
+            }
           </div>
 
           <!-- AI Recommendations -->

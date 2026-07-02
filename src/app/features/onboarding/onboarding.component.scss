@@ -173,6 +173,16 @@
   margin-bottom: 16px;
 }
 
+.custom-entry {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.custom-entry .input-field {
+  flex: 1;
+}
+
 .step-content {
   min-height: 280px;
 }

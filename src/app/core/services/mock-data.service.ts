@@ -1,16 +1,87 @@
 import { Injectable } from '@angular/core';
 
+
 export interface DemoPageContent {
   heroStats?: Array<{ value: string; label: string }>;
-  countries?: string[];
-  features?: Array<{ icon: string; title: string; description: string; bgColor: string; color: string }>;
-  steps?: Array<{ step: number; icon: string; title: string; description: string }>;
-  testimonials?: Array<{ name: string; location: string; crop: string; quote: string; avatar: string }>;
-  platformStats?: Array<{ value: string; label: string }>;
-  faqs?: Array<{ question: string; answer: string }>;
-  footerLinks?: Array<{ title: string; links: string[] }>;
-  languages?: Array<{ code: string; name: string }>;
+  
+
+  heroCards?: Array<{
+    title: string;
+    description: string;
+    icon: string;
+    color: string;
+  }>;
+
+  countries?: Array<{
+    name: string;
+    flag: string;
+  }>;
+
+  features?: Array<{
+    icon: string;
+    title: string;
+    description: string;
+    bgColor: string;
+    color: string;
+  }>;
+
+  benefits?: Array<{
+    title: string;
+    heading: string;
+    description: string;
+    image: string;
+  }>;
+
+  caseStudies?: Array<{
+    title: string;
+    subtitle: string;
+    image: string;
+  }>;
+
+  showcaseCards?: Array<{
+    title: string;
+    value: string;
+    icon: string;
+  }>;
+
+  steps?: Array<{
+    step: number;
+    icon: string;
+    title: string;
+    description: string;
+  }>;
+
+  testimonials?: Array<{
+    name: string;
+    location: string;
+    crop: string;
+    quote: string;
+    avatar: string;
+  }>;
+
+  platformStats?: Array<{
+    value: string;
+    label: string;
+  }>;
+
+  faqs?: Array<{
+    question: string;
+    answer: string;
+  }>;
+
+  footerLinks?: Array<{
+    title: string;
+    links: string[];
+  }>;
+
+  languages?: Array<{
+    code: string;
+    name: string;
+  }>;
 }
+
+
+
 
 @Injectable({ providedIn: 'root' })
 export class MockDataService {
@@ -21,8 +92,68 @@ export class MockDataService {
       { value: '42%', label: 'Avg Yield Increase' },
       { value: '4.9★', label: 'User Rating' },
     ],
-    countries: ['South Africa', 'Kenya', 'Nigeria', 'Ghana', 'Zimbabwe', 'Zambia', 'Uganda', 'Mozambique', 'Botswana'],
-    features: [
+
+    heroCards: [
+  {
+    title: 'AI Crop Analysis',
+    description: 'Disease detection completed in 8 seconds.',
+    icon: 'psychology',
+    color: '#2E7D32'
+  },
+  {
+    title: 'Today\'s Weather',
+    description: '28°C • Perfect planting conditions',
+    icon: 'wb_sunny',
+    color: '#F59E0B'
+  },
+  {
+    title: 'Market Prices',
+    description: 'Maize prices increased by 12%',
+    icon: 'trending_up',
+    color: '#2563EB'
+  }
+],
+
+    countries: [
+  {
+    name: 'South Africa',
+    flag: 'https://flagcdn.com/w80/za.png'
+  },
+  {
+    name: 'Kenya',
+    flag: 'https://flagcdn.com/w80/ke.png'
+  },
+  {
+    name: 'Nigeria',
+    flag: 'https://flagcdn.com/w80/ng.png'
+  },
+  {
+    name: 'Ghana',
+    flag: 'https://flagcdn.com/w80/gh.png'
+  },
+  {
+    name: 'Zimbabwe',
+    flag: 'https://flagcdn.com/w80/zw.png'
+  },
+  {
+    name: 'Zambia',
+    flag: 'https://flagcdn.com/w80/zm.png'
+  },
+  {
+    name: 'Uganda',
+    flag: 'https://flagcdn.com/w80/ug.png'
+  },
+  {
+    name: 'Mozambique',
+    flag: 'https://flagcdn.com/w80/mz.png'
+  },
+  {
+    name: 'Botswana',
+    flag: 'https://flagcdn.com/w80/bw.png'
+  }
+],
+
+   features: [
       { icon: 'psychology', title: 'AI Chat Assistant', description: 'Ask anything about your farm — crop diseases, planting advice, market insights — in your local language.', bgColor: 'rgba(46,125,50,0.1)', color: '#2E7D32' },
       { icon: 'biotech', title: 'Disease Detection', description: 'Upload a photo of your crop and our AI will identify diseases and prescribe treatments instantly.', bgColor: 'rgba(239,68,68,0.1)', color: '#DC2626' },
       { icon: 'tips_and_updates', title: 'Crop Advisor', description: 'Get AI-powered recommendations on what to plant based on your soil, climate, budget, and season.', bgColor: 'rgba(245,158,11,0.1)', color: '#D97706' },
@@ -32,6 +163,80 @@ export class MockDataService {
       { icon: 'storefront', title: 'Marketplace', description: 'Buy inputs at fair prices and sell your produce directly to verified buyers across the continent.', bgColor: 'rgba(236,72,153,0.1)', color: '#DB2777' },
       { icon: 'groups', title: 'Farmer Community', description: 'Connect with farmers, experts, and agronomists across Africa to share knowledge and experiences.', bgColor: 'rgba(234,179,8,0.1)', color: '#CA8A04' },
     ],
+
+    benefits: [
+  {
+    title: 'AI Assistant',
+    heading: 'Your farming expert available 24/7',
+    description:
+      'Ask questions about pests, irrigation, fertiliser and crop rotation.',
+    image:
+      'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=900'
+  },
+  {
+    title: 'Disease Detection',
+    heading: 'Detect diseases before they spread',
+    description:
+      'Upload crop images and receive AI-powered diagnoses in seconds.',
+    image:
+      'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=900'
+  },
+  {
+    title: 'Weather Intelligence',
+    heading: 'Know the weather before it happens',
+    description:
+      'Hyper-local weather forecasts with AI recommendations.',
+    image:
+      'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=900'
+  },
+  {
+    title: 'Marketplace',
+    heading: 'Sell produce at the best prices',
+    description:
+      'Connect with verified buyers across Africa.',
+    image:
+      'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=900'
+  }
+],
+
+caseStudies: [
+  {
+    title: 'Disease Detection',
+    subtitle: 'Saved 80% of a maize harvest.',
+    image:
+      'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=900'
+  },
+  {
+    title: 'Smart Irrigation',
+    subtitle: 'Reduced water consumption by 60%.',
+    image:
+      'https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=900'
+  },
+  {
+    title: 'Yield Prediction',
+    subtitle: 'Improved harvest planning.',
+    image:
+      'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=900'
+  }
+],
+
+showcaseCards: [
+  {
+    title: 'Disease Accuracy',
+    value: '95%',
+    icon: 'verified'
+  },
+  {
+    title: 'Yield Increase',
+    value: '42%',
+    icon: 'trending_up'
+  },
+  {
+    title: 'Countries',
+    value: '9',
+    icon: 'public'
+  }
+],
     steps: [
       { step: 1, icon: 'person_add', title: 'Create Your Account', description: 'Sign up for free in 2 minutes. No credit card needed.' },
       { step: 2, icon: 'yard', title: 'Set Up Your Farm', description: 'Enter your farm details, crops, and location to personalise your experience.' },
@@ -41,7 +246,7 @@ export class MockDataService {
     testimonials: [
       { name: 'Amara Osei', location: 'Kumasi, Ghana', crop: 'Maize Farmer', quote: 'HarvestAI helped me identify Fall Armyworm on my maize before it destroyed my crop. The AI gave me the exact treatment and I saved 80% of my harvest.', avatar: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=80&h=80&fit=crop&crop=face' },
       { name: 'Dr. Grace Mwangi', location: 'Nairobi, Kenya', crop: 'Horticulture', quote: 'The market price feature is invaluable. I waited 2 weeks based on the AI recommendation and sold my tomatoes at 35% above the price I was originally offered.', avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=80&h=80&fit=crop&crop=face' },
-      { name: 'Thabo Nkosi', location: 'Limpopo, SA', crop: 'Mixed Farming', quote: 'I was sceptical about AI at first, but the crop advisor recommended I try drip irrigation for my tomatoes. My water use dropped 60% and yields increased by 3 tons per hectare.', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face' },
+      { name: 'Yonela Kulati', location: 'Limpopo, SA', crop: 'Mixed Farming', quote: 'I was sceptical about AI at first, but the crop advisor recommended I try drip irrigation for my tomatoes. My water use dropped 60% and yields increased by 3 tons per hectare.', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face' },
     ],
     platformStats: [
       { value: '24,000+', label: 'Active Farmers' },
@@ -217,6 +422,8 @@ export class MockDataService {
       { icon: 'air', title: 'Moderate Wind Advisory', description: 'Winds of 35–45 km/h expected from the north on Monday.', time: 'Valid Monday morning', severity: 'low', badgeClass: 'badge-info' },
     ],
   };
+
+
 
   readonly community = {
     categories: [

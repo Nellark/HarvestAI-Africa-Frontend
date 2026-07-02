@@ -46,8 +46,22 @@
       @if (currentStep() === 0) {
         <div class="step-content page-enter">
           <div class="field-group">
+            <label>Your full name *</label>
+            <input class="input-field" type="text" [(ngModel)]="personalDetails.fullName" placeholder="e.g. Yonela Kulati" />
+          </div>
+          <div class="field-row-2">
+            <div class="field-group">
+              <label>Email address *</label>
+              <input class="input-field" type="email" [(ngModel)]="personalDetails.email" placeholder="you@example.com" />
+            </div>
+            <div class="field-group">
+              <label>Phone number</label>
+              <input class="input-field" type="tel" [(ngModel)]="personalDetails.phone" placeholder="e.g. +27 82 123 4567" />
+            </div>
+          </div>
+          <div class="field-group">
             <label>Farm Name *</label>
-            <input class="input-field" type="text" [(ngModel)]="farm.name" placeholder="e.g. Nkosi Family Farm" />
+            <input class="input-field" type="text" [(ngModel)]="farm.name" placeholder="e.g. Mphago Family Farm" />
           </div>
           <div class="field-row-2">
             <div class="field-group">
@@ -62,9 +76,15 @@
               </select>
             </div>
           </div>
-          <div class="field-group">
-            <label>Province / Region *</label>
-            <input class="input-field" type="text" [(ngModel)]="farm.province" placeholder="e.g. Limpopo" />
+          <div class="field-row-2">
+            <div class="field-group">
+              <label>Province / Region *</label>
+              <input class="input-field" type="text" [(ngModel)]="farm.province" placeholder="e.g. Limpopo" />
+            </div>
+            <div class="field-group">
+              <label>Country</label>
+              <input class="input-field" type="text" [(ngModel)]="personalDetails.country" placeholder="e.g. South Africa" />
+            </div>
           </div>
         </div>
       }
@@ -72,7 +92,11 @@
       <!-- Step 1: Crops -->
       @if (currentStep() === 1) {
         <div class="step-content page-enter">
-          <p class="step-hint">Select all the crops you currently grow or plan to grow:</p>
+          <p class="step-hint">Select all the crops you currently grow or plan to grow, or type your own:</p>
+          <div class="custom-entry">
+            <input class="input-field" type="text" [(ngModel)]="customCropInput" placeholder="Type a crop name, e.g. Avocado" (keydown.enter)="$event.preventDefault(); addCustomCrop()" />
+            <button type="button" class="btn btn-outline btn-sm" (click)="addCustomCrop()">Add</button>
+          </div>
           <div class="crops-grid">
             @for (crop of cropOptions; track crop.name) {
               <button type="button" class="crop-btn" [class.selected]="isCropSelected(crop.name)" (click)="toggleCrop(crop.name)">
@@ -90,7 +114,11 @@
       <!-- Step 2: Livestock -->
       @if (currentStep() === 2) {
         <div class="step-content page-enter">
-          <p class="step-hint">Select the livestock you keep (if any):</p>
+          <p class="step-hint">Select the livestock you keep (if any), or type your own:</p>
+          <div class="custom-entry">
+            <input class="input-field" type="text" [(ngModel)]="customLivestockInput" placeholder="Type a livestock type, e.g. Turkey" (keydown.enter)="$event.preventDefault(); addCustomLivestock()" />
+            <button type="button" class="btn btn-outline btn-sm" (click)="addCustomLivestock()">Add</button>
+          </div>
           <div class="livestock-grid">
             @for (animal of livestockOptions; track animal.name) {
               <button type="button" class="crop-btn" [class.selected]="isLivestockSelected(animal.name)" (click)="toggleLivestock(animal.name)">
@@ -178,9 +206,9 @@
             Continue <mat-icon>arrow_forward</mat-icon>
           </button>
         } @else {
-          <a routerLink="/app/dashboard" class="btn btn-primary btn-lg">
+          <button type="button" class="btn btn-primary btn-lg" (click)="finishOnboarding()">
             <mat-icon>rocket_launch</mat-icon> Start Using HarvestAI
-          </a>
+          </button>
         }
       </div>
     </div>
