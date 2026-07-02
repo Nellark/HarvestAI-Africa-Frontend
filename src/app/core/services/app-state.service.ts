@@ -89,11 +89,17 @@ export class AppStateService {
     this.prices.set([]);
     localStorage.removeItem('harvestai-token');
     localStorage.removeItem('harvestai-user');
+    localStorage.removeItem('harvestai-farm');
   }
 
   // Farm data methods
   setFarm(farm: Farm | null) {
     this.farm.set(farm);
+    if (farm) {
+      localStorage.setItem('harvestai-farm', JSON.stringify(farm));
+    } else {
+      localStorage.removeItem('harvestai-farm');
+    }
   }
 
   getFarm(): Farm | null {
@@ -231,7 +237,7 @@ export class AppStateService {
       waterSource: payload.waterSource,
     };
 
-    this.farm.set(newFarm);
+    this.setFarm(newFarm);
   }
 
   updateProfile(profile: Partial<User>) {
@@ -275,6 +281,16 @@ export class AppStateService {
         this.user.set(JSON.parse(savedUser));
       } catch (e) {
         console.error('Failed to parse saved user', e);
+      }
+    }
+
+    // Load farm from localStorage
+    const savedFarm = localStorage.getItem('harvestai-farm');
+    if (savedFarm) {
+      try {
+        this.farm.set(JSON.parse(savedFarm));
+      } catch (e) {
+        console.error('Failed to parse saved farm', e);
       }
     }
 

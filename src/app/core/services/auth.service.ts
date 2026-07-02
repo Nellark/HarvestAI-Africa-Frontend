@@ -16,17 +16,12 @@ export class AuthService {
   private readonly api = inject(ApiService);
 
   initializeSession(): void {
-    const savedUser = localStorage.getItem('harvestai-user');
-    if (savedUser) {
-      try {
-        this.state.user.set(JSON.parse(savedUser));
-      } catch {
-        localStorage.removeItem('harvestai-user');
-      }
-    }
+    this.state.initialize();
 
-    // Seed demo data for the UI foundation
-    this.state.setFarm(MOCK_FARM);
+    // Seed demo data for the UI foundation, without overwriting a saved farm
+    if (!this.state.getFarm()) {
+      this.state.setFarm(MOCK_FARM);
+    }
     this.state.setWeather(MOCK_WEATHER);
     this.state.setPrices(MOCK_PRICES);
     this.state.setNotifications(MOCK_NOTIFICATIONS);
