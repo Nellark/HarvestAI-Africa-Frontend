@@ -9,7 +9,7 @@ export class A11yFocusDirective {
 
   @HostListener('keydown.enter', ['$event'])
   @HostListener('keydown.space', ['$event'])
-  onEnter(event: KeyboardEvent) {
+  onEnter(event: Event) {
     // Prevent default behavior for space/enter on clickable elements
     if (this.el.nativeElement.getAttribute('role') === 'button') {
       event.preventDefault();
@@ -18,7 +18,7 @@ export class A11yFocusDirective {
   }
 
   @HostListener('keydown.tab', ['$event'])
-  onTab(event: KeyboardEvent) {
+  onTab(event: Event) {
     // Add visual focus indicator
     this.el.nativeElement.classList.add('keyboard-focus');
   }

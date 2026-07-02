@@ -1,5 +1,6 @@
 import { Injectable, signal, computed } from '@angular/core';
-import type { User, Farm, WeatherData, Notification, Task, MarketData, AnalyticsData, CommunityData } from '../models/app.models';
+import type { MarketData, AnalyticsData, CommunityData } from '../models/app.models';
+import type { User, Farm, WeatherData, Notification, PlannerTask, CropPrice, CropRecord } from '../../shared/models/app.models';
 
 interface OnboardingPayload {
   name: string;
@@ -7,11 +8,12 @@ interface OnboardingPayload {
   email?: string;
   phone?: string;
   size: number;
+  sizeUnit: 'ha' | 'acres';
   province: string;
   country: string;
   crops: string[];
   soilType: string;
-  irrigationType: string;
+  waterSource: string;
   language: string;
 }
 
@@ -27,8 +29,6 @@ export class AppStateService {
     province: '',
     language: 'en',
     onboardingComplete: false,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
   };
 
   // User session
@@ -43,8 +43,9 @@ export class AppStateService {
   readonly marketData = signal<MarketData | null>(null);
   readonly analyticsData = signal<AnalyticsData | null>(null);
   readonly communityData = signal<CommunityData | null>(null);
-  readonly tasks = signal<Task[]>([]);
+  readonly tasks = signal<PlannerTask[]>([]);
   readonly notifications = signal<Notification[]>([]);
+  readonly prices = signal<CropPrice[]>([]);
 
   // UI state
   readonly isDarkMode = signal<boolean>(false);
@@ -85,6 +86,7 @@ export class AppStateService {
     this.communityData.set(null);
     this.tasks.set([]);
     this.notifications.set([]);
+    this.prices.set([]);
     localStorage.removeItem('harvestai-token');
     localStorage.removeItem('harvestai-user');
   }
@@ -115,7 +117,11 @@ export class AppStateService {
     this.communityData.set(data);
   }
 
-  setTasks(tasks: Task[]) {
+  setPrices(prices: CropPrice[]) {
+    this.prices.set(prices);
+  }
+
+  setTasks(tasks: PlannerTask[]) {
     this.tasks.set(tasks);
   }
 
@@ -137,6 +143,10 @@ export class AppStateService {
   }
 
   // UI state methods
+  toggleTheme() {
+    this.toggleDarkMode();
+  }
+
   toggleDarkMode() {
     this.isDarkMode.update((v) => !v);
     document.body.classList.toggle('dark-theme', this.isDarkMode());
@@ -191,27 +201,34 @@ export class AppStateService {
       province: payload.province || currentUser.province,
       language: payload.language || currentUser.language,
       onboardingComplete: true,
-      updatedAt: new Date().toISOString(),
     });
 
     this.language.set(payload.language || currentUser.language);
 
     // Create initial farm
+    const crops: CropRecord[] = (payload.crops || []).map((name, index) => ({
+      id: `crop-${index + 1}`,
+      name,
+      plantedDate: '',
+      expectedHarvestDate: '',
+      area: 0,
+      areaUnit: payload.sizeUnit,
+      status: 'planted',
+      healthScore: 100,
+      icon: 'grass',
+    }));
+
     const newFarm: Farm = {
       id: `farm-${Date.now()}`,
-      userId: currentUser.id,
       name: payload.name || 'My Farm',
-      location: {
-        country: payload.country,
-        province: payload.province,
-        district: '',
-      },
       size: payload.size,
+      sizeUnit: payload.sizeUnit,
+      province: payload.province,
+      country: payload.country,
+      crops,
+      livestock: [],
       soilType: payload.soilType,
-      irrigationType: payload.irrigationType as any,
-      fields: [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+      waterSource: payload.waterSource,
     };
 
     this.farm.set(newFarm);
@@ -224,7 +241,6 @@ export class AppStateService {
     this.user.set({
       ...currentUser,
       ...profile,
-      updatedAt: new Date().toISOString(),
     });
   }
 
@@ -235,7 +251,6 @@ export class AppStateService {
     this.user.set({
       ...currentUser,
       avatar: avatar ?? undefined,
-      updatedAt: new Date().toISOString(),
     });
   }
 
