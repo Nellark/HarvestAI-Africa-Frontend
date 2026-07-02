@@ -32,7 +32,6 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent) },
       { path: 'farm', loadComponent: () => import('./features/my-farm/my-farm.component').then(m => m.MyFarmComponent) },
-      { path: 'ai-assistant', loadComponent: () => import('./features/ai-assistant/ai-assistant.component').then(m => m.AiAssistantComponent) },
       { path: 'disease-detection', loadComponent: () => import('./features/disease-detection/disease-detection.component').then(m => m.DiseaseDetectionComponent) },
       { path: 'weather', loadComponent: () => import('./features/weather/weather.component').then(m => m.WeatherComponent) },
       { path: 'crop-advisor', loadComponent: () => import('./features/crop-advisor/crop-advisor.component').then(m => m.CropAdvisorComponent) },

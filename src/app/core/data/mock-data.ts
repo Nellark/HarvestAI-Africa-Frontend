@@ -15,7 +15,6 @@ import {
 export const APP_NAV_ITEMS: NavItem[] = [
   { label: 'Dashboard', path: '/app/dashboard', icon: 'space_dashboard' },
   { label: 'My Farm', path: '/app/my-farm', icon: 'yard' },
-  { label: 'AI Assistant', path: '/app/ai-assistant', icon: 'smart_toy' },
   { label: 'Disease Detection', path: '/app/disease-detection', icon: 'sick' },
   { label: 'Crop Advisor', path: '/app/crop-advisor', icon: 'psychiatry' },
   { label: 'Weather', path: '/app/weather', icon: 'cloud' },
@@ -32,7 +31,7 @@ export const APP_NAV_ITEMS: NavItem[] = [
 
 export const BOTTOM_NAV_ITEMS: NavItem[] = [
   { label: 'Home', path: '/app/dashboard', icon: 'space_dashboard' },
-  { label: 'Assistant', path: '/app/ai-assistant', icon: 'smart_toy' },
+  { label: 'Scan', path: '/app/disease-detection', icon: 'sick' },
   { label: 'Weather', path: '/app/weather', icon: 'cloud' },
   { label: 'Planner', path: '/app/planner', icon: 'event' },
   { label: 'More', path: '/app/settings', icon: 'menu' },

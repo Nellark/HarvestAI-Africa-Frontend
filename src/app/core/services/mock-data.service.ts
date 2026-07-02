@@ -154,22 +154,22 @@ export class MockDataService {
 ],
 
    features: [
-      { icon: 'psychology', title: 'AI Chat Assistant', description: 'Ask anything about your farm — crop diseases, planting advice, market insights — in your local language.', bgColor: 'rgba(46,125,50,0.1)', color: '#2E7D32' },
+      { icon: 'calendar_month', title: 'Smart Farm Planner', description: 'Schedule planting, irrigation, fertilization, and harvesting tasks with reminders from the system.', bgColor: 'rgba(46,125,50,0.1)', color: '#2E7D32' },
       { icon: 'biotech', title: 'Disease Detection', description: 'Upload a photo of your crop and our AI will identify diseases and prescribe treatments instantly.', bgColor: 'rgba(239,68,68,0.1)', color: '#DC2626' },
       { icon: 'tips_and_updates', title: 'Crop Advisor', description: 'Get AI-powered recommendations on what to plant based on your soil, climate, budget, and season.', bgColor: 'rgba(245,158,11,0.1)', color: '#D97706' },
       { icon: 'wb_sunny', title: 'Weather Intelligence', description: 'Hyperlocal weather forecasts with AI farming advice tailored to your crops and location.', bgColor: 'rgba(59,130,246,0.1)', color: '#2563EB' },
       { icon: 'trending_up', title: 'Yield Forecasting', description: 'AI-powered yield predictions with confidence intervals to plan your sales and logistics.', bgColor: 'rgba(16,185,129,0.1)', color: '#059669' },
-      { icon: 'price_check', title: 'Market Prices', description: 'Real-time market prices from major African exchanges with AI timing recommendations.', bgColor: 'rgba(139,92,246,0.1)', color: '#7C3AED' },
+      { icon: 'price_check', title: 'Market Prices', description: 'View current market prices for major crops.', bgColor: 'rgba(139,92,246,0.1)', color: '#7C3AED' },
       { icon: 'storefront', title: 'Marketplace', description: 'Buy inputs at fair prices and sell your produce directly to verified buyers across the continent.', bgColor: 'rgba(236,72,153,0.1)', color: '#DB2777' },
       { icon: 'groups', title: 'Farmer Community', description: 'Connect with farmers, experts, and agronomists across Africa to share knowledge and experiences.', bgColor: 'rgba(234,179,8,0.1)', color: '#CA8A04' },
     ],
 
     benefits: [
   {
-    title: 'AI Assistant',
-    heading: 'Your farming expert available 24/7',
+    title: 'Yield Forecasting',
+    heading: 'Plan your harvest with confidence',
     description:
-      'Ask questions about pests, irrigation, fertiliser and crop rotation.',
+      'HarvestAI estimates expected crop yield based on crop type, weather conditions, and farm information.',
     image:
       'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=900'
   },
@@ -255,14 +255,14 @@ showcaseCards: [
       { value: 'R1.2B', label: 'Crop Value Managed' },
     ],
     faqs: [
-      { question: 'Is HarvestAI free to use?', answer: 'Yes! HarvestAI offers a free plan with full access to core features including the AI assistant, disease detection, and weather. Premium plans unlock advanced analytics and unlimited API calls.' },
+      { question: 'Is HarvestAI free to use?', answer: 'Yes! HarvestAI offers a free plan with full access to core features including disease detection, yield forecasting, and weather. Premium plans unlock advanced analytics and unlimited API calls.' },
       { question: 'Does the app work offline?', answer: 'Yes, HarvestAI is designed to work in areas with poor connectivity. Core features like the farm diary, tasks, and cached weather data are available offline. Data syncs automatically when you reconnect.' },
       { question: 'Which languages are supported?', answer: 'HarvestAI currently supports English with full translation support coming for isiZulu, Swahili, French, Portuguese, and Arabic — covering the majority of African farming communities.' },
       { question: 'How accurate is the disease detection?', answer: 'Our disease detection model has been trained on over 500,000 images of African crop diseases and achieves 88–95% accuracy on the top 50 most common crop diseases in sub-Saharan Africa.' },
       { question: 'Can I connect my existing IoT sensors?', answer: 'Yes, HarvestAI supports integration with popular IoT soil sensors and weather stations. Our API allows you to push data directly from your devices for real-time monitoring.' },
     ],
     footerLinks: [
-      { title: 'Product', links: ['Dashboard', 'AI Assistant', 'Disease Detection', 'Market Prices', 'Marketplace', 'Mobile App'] },
+      { title: 'Product', links: ['Dashboard', 'Disease Detection', 'Yield Forecast', 'Market Prices', 'Marketplace', 'Mobile App'] },
       { title: 'Company', links: ['About Us', 'Blog', 'Careers', 'Press', 'Partners', 'Contact'] },
       { title: 'Support', links: ['Documentation', 'API Reference', 'Community Forum', 'Help Center', 'Status', 'Privacy Policy'] },
     ],
@@ -312,7 +312,6 @@ showcaseCards: [
     ],
     quickActions: [
       { icon: 'biotech', label: 'Scan Crop', route: '/app/disease-detection' },
-      { icon: 'psychology', label: 'Ask AI', route: '/app/ai-assistant' },
       { icon: 'price_check', label: 'Prices', route: '/app/market-prices' },
       { icon: 'calendar_month', label: 'Planner', route: '/app/planner' },
       { icon: 'wb_sunny', label: 'Weather', route: '/app/weather' },
